@@ -23,9 +23,18 @@ class Receiver(object):
         return self.posX ** 2 + self.posY ** 2 + self.posZ ** 2
     
     def receive(self):
-        src = np.array([Receiver.srcX, Receiver.srcY, Receiver.srcZ])
+        src = Receiver.getSourcePosition()
         pos = np.array([self.posX, self.posY, self.posZ])
         self.receivedTime = np.linalg.norm(pos - src) / Receiver.c #seconds
+    
+    @classmethod
+    def setSourcePosition(cls, xPos = srcX, yPos = srcY, zPos = srcZ):
+        cls.srcX, cls.srcY, cls.srcZ = xPos, yPos, zPos
+    
+    @classmethod
+    def getSourcePosition(cls):
+        return np.array([cls.srcX, cls.srcY, cls.srcZ])
+    
 
 class MLE_HLS(object):
     def __init__(self, receivers = [], refRecId = 0):
@@ -38,11 +47,6 @@ class MLE_HLS(object):
     def setupProfile(self):
         self.posMatrix = np.array([rec.pos() - self.refRec.pos() for rec in self.receivers if rec != self.refRec])
         self.posMatrix = -np.linalg.inv(self.posMatrix)
-        
-        self.k_distMatrix = 0.5 * np.array([[rec.dist(self.refRec) ** 2 - rec.calcK() + self.refRec.calcK()] \
-                                            for rec in self.receivers if rec != self.refRec])
-    
-        self.distMatrix = np.array([[rec.dist(self.refRec)] for rec in self.receivers if rec != self.refRec])
         self.refRec_k = self.refRec.calcK()
         
     def HLS_OF_calc(self): #D - distance between reference antenna and source
@@ -62,8 +66,8 @@ class MLE_HLS(object):
         OF_sol_1 = sum(OF_sol_1)
         OF_sol_2 = sum(OF_sol_2)
         
-        print "OF 1", OF_sol_1
-        print "OF_2", OF_sol_2
+        #print("OF 1", OF_sol_1)
+        #print("OF_2", OF_sol_2)
         
         if OF_sol_2 < OF_sol_1:
             return srcPositions[1]
@@ -80,56 +84,86 @@ class MLE_HLS(object):
                 2 * Zs * self.refRec.posZ + self.refRec_k)
     
     def calculate(self):
+        self.k_distMatrix = 0.5 * np.array([[rec.dist(self.refRec) ** 2 - rec.calcK() + self.refRec_k] \
+                                    for rec in self.receivers if rec != self.refRec])
+        self.distMatrix = np.array([[rec.dist(self.refRec)] for rec in self.receivers if rec != self.refRec])
+        
         self.D_ref = fsolve(lambda D: self.MLE_D_equation(D), [1, 1])
         return self.HLS_OF_calc()
-        
+        #return self.MLE_calc_src(max(self.D_ref))
         
     class InvalidInput(Exception):
         pass
+
+
+class PerformanceTest(object):
+    def __init__(self, xRange = 20, yRange = 20, zRange = 20, delta = 0.1):
+        self.delta = delta
+        self.xRange, self.yRange, self.zRange = xRange, yRange, zRange
+        
+        receivers = [
+                            Receiver(-1.0, -1.0, -1.0),
+                            Receiver(-1.0, 1.0, 1.0),
+                            Receiver(1.0, 1.0, -1.0),
+                            Receiver(1.0, -1.0, -1.0)
+                    ]
+        self.localizer = MLE_HLS(receivers)
+        
+        self.xStart, self.yStart, self.zStart = -xRange/2, -yRange/2, -zRange/2
+
+        self.gAccurracy = [] # err <= 0.05
+        self.mAccurracy = [] # err <= 0.2
+        self.pAccurracy = [] # err <= 1
+        self.bAccurracy = [] # err > 1
+        
+    def excecute(self):
+        for xPos in np.arange(self.xStart, self.xStart + self.xRange + self.delta, self.delta):
+            #change X pos
+            for yPos in np.arange(self.yStart, self.yStart + self.yRange + self.delta, self.delta):
+                #change Y pos
+                for zPos in np.arange(self.zStart, self.zStart + self.zRange + self.delta, self.delta):
+                    #change Z pos
+                    self.setupSourcePosition(xPos, yPos, zPos)
+                    pos = self.localizer.calculate()
+                    self.assesAccuracy(pos)
+    
+    def setupSourcePosition(self, xPos, yPos, zPos):
+        Receiver.setSourcePosition(xPos, yPos, zPos)
+        for rec in self.localizer.receivers:
+            rec.receive()
+    
+    def assesAccuracy(self, calcSrcPostion):
+        actualPos = Receiver.getSourcePosition()
+        err = np.linalg.norm(calcSrcPostion - actualPos)
+        if err <= 0.05:
+            self.gAccurracy.append(tuple(actualPos))
+        elif err <= 0.2:
+            self.mAccurracy.append(tuple(actualPos))
+        elif err <= 1.0:
+            self.pAccurracy.append(tuple(actualPos))
+        else:
+            self.bAccurracy.append(tuple(actualPos))
         
 
-def calcSrcPosition(D, posArray, k_distArray, distArray):
-    return np.matmul(posArray, (distArray * D + k_distArray))
-
-def MLE(rec1, rec2, rec3, rec4):
-    posArray = np.array([rec2.pos() - rec1.pos(),
-                rec3.pos() - rec1.pos(),
-                rec4.pos() - rec1.pos()])
-    posArray = -np.linalg.inv(posArray)
-    
-    distK = np.array([[rec2.dist(rec1) ** 2 - rec2.calcK() + rec1.calcK()],
-                      [rec3.dist(rec1) ** 2 - rec3.calcK() + rec1.calcK()],
-                      [rec4.dist(rec1) ** 2 - rec4.calcK() + rec1.calcK()]])
-    distK = 0.5 * distK
-    
-    distArray = np.array([[rec2.dist(rec1)],
-                   [rec3.dist(rec1)],
-                   [rec4.dist(rec1)]])
-    
-    D1c = (posArray[0,0] * distArray[0] + posArray[0,1] * distArray[1] + posArray[0,2] * distArray[2])
-    D2c = (posArray[1,0] * distArray[0] + posArray[1,1] * distArray[1] + posArray[1,2] * distArray[2]) 
-    D3c = (posArray[2,0] * distArray[0] + posArray[2,1] * distArray[1] + posArray[2,2] * distArray[2])
-    
-    D1a = posArray[0,0] * distK[0] + posArray[0,1] * distK[1] + posArray[0,2] * distK[2]
-    D2a = posArray[1,0] * distK[0] + posArray[1,1] * distK[1] + posArray[1,2] * distK[2]
-    D3a = posArray[2,0] * distK[0] + posArray[2,1] * distK[1] + posArray[2,2] * distK[2]
-    
-    D = fsolve(lambda D, D1c = D1c, D2c = D2c, D3c = D3c, D1a = D1a, D2a = D2a, D3a = D3a, x1 = rec1.posX, y1 = rec1.posY, z1 = rec1.posZ, K1 = rec1.calcK(): -D ** 2 + (D * D1c + D1a) ** 2 + (D * D2c + D2a) ** 2 + (D * D3c + D3a) ** 2 - 2 * (D * D1c + D1a) * x1 - 2 * (D * D2c + D2a) * y1 - 2 * (D * D3c + D3a)  * z1 + K1 , [-20, 20])
-    
-    print D
-    print calcSrcPosition(max(D), posArray, distK, distArray)
-    print "Now MLE class"
-    
 def main():
-    rec1 = Receiver(0.0, 0.0, 0.0)
-    rec2 = Receiver(1.5, 0.0, 0.0)
-    rec3 = Receiver(0.0, 3.0, 0.0)
-    rec4 = Receiver(1.5, 3.0, 0.01)
+    rec1 = Receiver(-1.0, -1.0, -1.0)
+    rec2 = Receiver(-1.0, 1.0, 1.0)
+    rec3 = Receiver(1.0, 1.0, -1.0)
+    rec4 = Receiver(1.0, -1.0, -1.0)
     
-    MLE(rec1, rec2, rec3, rec4)
+    #MLE(rec1, rec2, rec3, rec4)
     m = MLE_HLS(receivers = [rec1, rec2, rec3, rec4])
-    print np.around(m.calculate(), decimals = 3)
+    res = m.calculate()
+    
+    print(np.around(res, decimals = 3))
 
 #profile.run('main()')
-main()
+
+#main()
+p = PerformanceTest(1,1,1, 1)
+p.excecute()
+
+print (p.bAccurracy)
+
+
 
