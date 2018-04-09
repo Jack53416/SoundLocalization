@@ -2,9 +2,12 @@ import numpy as np
 from scipy.optimize import fsolve
 import profile
 
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+
 class Receiver(object):
-    srcX = 1.0
-    srcY = 3.0
+    srcX = -5.0
+    srcY = 4.0
     srcZ = 0.0
 
     c = 340 #m/x
@@ -88,9 +91,9 @@ class MLE_HLS(object):
                                     for rec in self.receivers if rec != self.refRec])
         self.distMatrix = np.array([[rec.dist(self.refRec)] for rec in self.receivers if rec != self.refRec])
         
-        self.D_ref = fsolve(lambda D: self.MLE_D_equation(D), [1, 1])
-        return self.HLS_OF_calc()
-        #return self.MLE_calc_src(max(self.D_ref))
+        self.D_ref = fsolve(lambda D: self.MLE_D_equation(D), [-20, 20])
+        #return self.HLS_OF_calc()
+        return self.MLE_calc_src(max(self.D_ref)).flatten()
         
     class InvalidInput(Exception):
         pass
@@ -119,12 +122,14 @@ class PerformanceTest(object):
     def excecute(self):
         for xPos in np.arange(self.xStart, self.xStart + self.xRange + self.delta, self.delta):
             #change X pos
+            print(xPos)
             for yPos in np.arange(self.yStart, self.yStart + self.yRange + self.delta, self.delta):
                 #change Y pos
                 for zPos in np.arange(self.zStart, self.zStart + self.zRange + self.delta, self.delta):
                     #change Z pos
                     self.setupSourcePosition(xPos, yPos, zPos)
                     pos = self.localizer.calculate()
+                    #print(pos)
                     self.assesAccuracy(pos)
     
     def setupSourcePosition(self, xPos, yPos, zPos):
@@ -143,6 +148,39 @@ class PerformanceTest(object):
             self.pAccurracy.append(tuple(actualPos))
         else:
             self.bAccurracy.append(tuple(actualPos))
+    
+    def plot(self):
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection = '3d')
+        gAccurracy = np.array(self.gAccurracy)
+        mAccurracy = np.array(self.mAccurracy)
+        pAccurracy = np.array(self.pAccurracy)
+        bAccurracy = np.array(self.bAccurracy)
+        
+        if len(gAccurracy) > 0:
+            ax.scatter(gAccurracy[:,0], gAccurracy[:,1], gAccurracy[:, 2], c = 'g', marker = 'o')
+        if len(mAccurracy) > 0:
+            ax.scatter(mAccurracy[:,0], mAccurracy[:,1], mAccurracy[:, 2], c = 'y', marker = 'o')
+        if len(pAccurracy) > 0:
+            ax.scatter(pAccurracy[:,0], pAccurracy[:,1], pAccurracy[:, 2], c = 'orange', marker = 'o')
+        if len(bAccurracy) > 0:
+            ax.scatter(bAccurracy[:,0], bAccurracy[:,1], bAccurracy[:, 2], c = 'r', marker = 'o')
+        
+        
+        ax.set_xlabel('X[m]')
+        ax.set_ylabel('Y[m]')
+        ax.set_zlabel('Z[m]')
+        
+        plt.show()
+    
+    def printStats(self):
+        captions = ["Good", "Medium", "Poor", "Bad"]
+        lengths = np.array([len(self.gAccurracy), len(self.mAccurracy), len(self.pAccurracy), len(self.bAccurracy)])
+        total = sum(lengths)
+        percentage = np.round(lengths / total * 100, 5)
+        print(dict(zip(captions, percentage)))
+        
+        
         
 
 def main():
@@ -155,15 +193,17 @@ def main():
     m = MLE_HLS(receivers = [rec1, rec2, rec3, rec4])
     res = m.calculate()
     
+    #print(np.around(m.MLE_calc_src(m.D_ref), decimals = 3))
     print(np.around(res, decimals = 3))
-
 #profile.run('main()')
 
 #main()
-p = PerformanceTest(1,1,1, 1)
+p = PerformanceTest(10,10,10, 1)
 p.excecute()
+p.printStats()
+p.plot()
+print(p.bAccurracy)
 
-print (p.bAccurracy)
 
 
 
