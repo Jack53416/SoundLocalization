@@ -1,14 +1,16 @@
 import numpy as np
 from scipy.optimize import fsolve
+from enum import Enum
 import profile
 
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+from matplotlib import gridspec
 
 class Receiver(object):
-    srcX = -5.0
-    srcY = 4.0
-    srcZ = 0.0
+    srcX = -8.0
+    srcY = 5.0
+    srcZ = 6.0
 
     c = 340 #m/x
     
@@ -28,7 +30,7 @@ class Receiver(object):
     def receive(self):
         src = Receiver.getSourcePosition()
         pos = np.array([self.posX, self.posY, self.posZ])
-        self.receivedTime = np.linalg.norm(pos - src) / Receiver.c #seconds
+        self.receivedTime = np.round(np.linalg.norm(pos - src) / Receiver.c, 4) #seconds
     
     @classmethod
     def setSourcePosition(cls, xPos = srcX, yPos = srcY, zPos = srcZ):
@@ -39,13 +41,24 @@ class Receiver(object):
         return np.array([cls.srcX, cls.srcY, cls.srcZ])
     
 
-class MLE_HLS(object):
-    def __init__(self, receivers = [], refRecId = 0):
+class MLE(object):
+    class Mode(Enum):
+        MLE_MINUS = 0
+        MLE_PLUS = 1
+        MLE_HLS = 2
+
+    def __init__(self, receivers = [], refRecId = 0, mode = Mode.MLE_HLS) :
         if len(receivers) != 4 :
             raise InvalidInput("4 receivers required for a=computation")
         self.receivers = receivers
         self.refRec = receivers[refRecId]
         self.setupProfile()
+        self.estimatedPositions = []
+        self.chosenRootIdx = None
+        if not isinstance(mode, Enum):
+            raise InvalidInput("Mode is not instance of MLE.Mode enum class")
+        
+        self.mode = mode
     
     def setupProfile(self):
         self.posMatrix = np.array([rec.pos() - self.refRec.pos() for rec in self.receivers if rec != self.refRec])
@@ -53,7 +66,7 @@ class MLE_HLS(object):
         self.refRec_k = self.refRec.calcK()
         
     def HLS_OF_calc(self): #D - distance between reference antenna and source
-        srcPositions = [self.MLE_calc_src(D).flatten() for D in self.D_ref]
+        srcPositions = [self.calcSrc(D).flatten() for D in self.D_ref]
         d_array_sol_1 = [np.linalg.norm(rec.pos() - srcPositions[0]) for rec in self.receivers]
         d_array_sol_2 = [np.linalg.norm(rec.pos() - srcPositions[1]) for rec in self.receivers]
         
@@ -71,16 +84,19 @@ class MLE_HLS(object):
         
         #print("OF 1", OF_sol_1)
         #print("OF_2", OF_sol_2)
+        self.estimatedPositions = srcPositions
         
         if OF_sol_2 < OF_sol_1:
+            self.chosenRootIdx = 1
             return srcPositions[1]
+        self.chosenRootIdx = 0
         return srcPositions[0]
         
-    def MLE_calc_src(self, D):
+    def calcSrc(self, D):
         return np.matmul(self.posMatrix, (self.distMatrix * D + self.k_distMatrix))
         
     def MLE_D_equation(self,D):
-        src = self.MLE_calc_src(D)
+        src = self.calcSrc(D)
         Xs, Ys, Zs = src[0], src[1], src[2]
         
         return (-D ** 2 + Xs ** 2 + Ys ** 2 + Zs ** 2 - 2 * Xs * self.refRec.posX - 2 * Ys * self.refRec.posY - \
@@ -91,26 +107,35 @@ class MLE_HLS(object):
                                     for rec in self.receivers if rec != self.refRec])
         self.distMatrix = np.array([[rec.dist(self.refRec)] for rec in self.receivers if rec != self.refRec])
         
-        self.D_ref = fsolve(lambda D: self.MLE_D_equation(D), [-20, 20])
-        #return self.HLS_OF_calc()
-        return self.MLE_calc_src(max(self.D_ref)).flatten()
+        self.D_ref = fsolve(lambda D: self.MLE_D_equation(D), [-40, 40])
         
+        if self.mode == self.Mode.MLE_HLS:
+            return self.HLS_OF_calc()
+        elif self.mode == self.Mode.MLE_PLUS:
+            return self.calcSrc(max(self.D_ref)).flatten()
+        return self.calcSrc(min(self.D_ref)).flatten()
+    
+    def getOtherSolution(self):
+        if self.chosenRootIdx == 0:
+            return self.estimatedPositions[1]
+        return self.estimatedPositions[0]
+    
     class InvalidInput(Exception):
         pass
 
 
 class PerformanceTest(object):
-    def __init__(self, xRange = 20, yRange = 20, zRange = 20, delta = 0.1):
+    def __init__(self, xRange = 20, yRange = 20, zRange = 20, delta = 0.1, allRoots = False, mleMode = MLE.Mode.MLE_HLS):
         self.delta = delta
         self.xRange, self.yRange, self.zRange = xRange, yRange, zRange
         
         receivers = [
-                            Receiver(-1.0, -1.0, -1.0),
-                            Receiver(-1.0, 1.0, 1.0),
-                            Receiver(1.0, 1.0, -1.0),
-                            Receiver(1.0, -1.0, -1.0)
+                            Receiver(-1.5, -1.5, -1.5),
+                            Receiver(-1.5, 1.5, 1.5),
+                            Receiver(1.5, 1.5, -1.5),
+                            Receiver(1.5, -1.5, -1.5)
                     ]
-        self.localizer = MLE_HLS(receivers)
+        self.localizer = MLE(receivers, mode = mleMode)
         
         self.xStart, self.yStart, self.zStart = -xRange/2, -yRange/2, -zRange/2
 
@@ -118,6 +143,8 @@ class PerformanceTest(object):
         self.mAccurracy = [] # err <= 0.2
         self.pAccurracy = [] # err <= 1
         self.bAccurracy = [] # err > 1
+        
+        self.allRoots = allRoots
         
     def excecute(self):
         for xPos in np.arange(self.xStart, self.xStart + self.xRange + self.delta, self.delta):
@@ -140,6 +167,11 @@ class PerformanceTest(object):
     def assesAccuracy(self, calcSrcPostion):
         actualPos = Receiver.getSourcePosition()
         err = np.linalg.norm(calcSrcPostion - actualPos)
+        
+        if self.allRoots:
+            err2 = np.linalg.norm(self.localizer.getOtherSolution() - actualPos)
+            err = min(err, err2)
+        
         if err <= 0.05:
             self.gAccurracy.append(tuple(actualPos))
         elif err <= 0.2:
@@ -150,35 +182,55 @@ class PerformanceTest(object):
             self.bAccurracy.append(tuple(actualPos))
     
     def plot(self):
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection = '3d')
+        fig = plt.figure(figsize = (8,6))
+        gs = gridspec.GridSpec(1, 2, width_ratios=[3, 1]) 
+        ax0 = plt.subplot(gs[0], projection = '3d')
         gAccurracy = np.array(self.gAccurracy)
         mAccurracy = np.array(self.mAccurracy)
         pAccurracy = np.array(self.pAccurracy)
         bAccurracy = np.array(self.bAccurracy)
         
         if len(gAccurracy) > 0:
-            ax.scatter(gAccurracy[:,0], gAccurracy[:,1], gAccurracy[:, 2], c = 'g', marker = 'o')
+            ax0.scatter(gAccurracy[:,0], gAccurracy[:,1], gAccurracy[:, 2], c = 'g', marker = 'o')
         if len(mAccurracy) > 0:
-            ax.scatter(mAccurracy[:,0], mAccurracy[:,1], mAccurracy[:, 2], c = 'y', marker = 'o')
+            ax0.scatter(mAccurracy[:,0], mAccurracy[:,1], mAccurracy[:, 2], c = 'y', marker = 'o')
         if len(pAccurracy) > 0:
-            ax.scatter(pAccurracy[:,0], pAccurracy[:,1], pAccurracy[:, 2], c = 'orange', marker = 'o')
+            ax0.scatter(pAccurracy[:,0], pAccurracy[:,1], pAccurracy[:, 2], c = 'orange', marker = 'o')
         if len(bAccurracy) > 0:
-            ax.scatter(bAccurracy[:,0], bAccurracy[:,1], bAccurracy[:, 2], c = 'r', marker = 'o')
+            ax0.scatter(bAccurracy[:,0], bAccurracy[:,1], bAccurracy[:, 2], c = 'r', marker = 'o')
         
         
-        ax.set_xlabel('X[m]')
-        ax.set_ylabel('Y[m]')
-        ax.set_zlabel('Z[m]')
+        ax0.set_xlabel('X[m]')
+        ax0.set_ylabel('Y[m]')
+        ax0.set_zlabel('Z[m]')
         
+        self.calcStats()
+        ax1 = plt.subplot(gs[1])
+        explode = (0.1, 0, 0 ,0)
+        labels = ['{0} - {1:1.2f} %'.format(i,j) for i,j in zip(self.captions, self.percentage)]
+
+        patches, text = ax1.pie(self.percentage, explode = explode, shadow = True, startangle = 90, 
+                                colors = ['g', 'y', 'orange', 'r'])
+        
+        patches, labels, dummy =  zip(*sorted(zip(patches, labels, self.percentage),
+                                          key=lambda x: x[2],
+                                          reverse=True))
+        
+        
+        ax1.legend(patches, labels, loc='lower center', bbox_to_anchor=(0.5, 0.1),
+           fontsize=8)
+
+        ax1.axis('equal')
+        
+        plt.tight_layout()
         plt.show()
     
-    def printStats(self):
-        captions = ["Good", "Medium", "Poor", "Bad"]
+    def calcStats(self):
+        self.captions = ["Good", "Medium", "Poor", "Bad"]
         lengths = np.array([len(self.gAccurracy), len(self.mAccurracy), len(self.pAccurracy), len(self.bAccurracy)])
         total = sum(lengths)
-        percentage = np.round(lengths / total * 100, 5)
-        print(dict(zip(captions, percentage)))
+        self.percentage = np.round(lengths / total * 100, 5)
+        #print(dict(zip(captions, percentage)))
         
         
         
@@ -190,19 +242,18 @@ def main():
     rec4 = Receiver(1.0, -1.0, -1.0)
     
     #MLE(rec1, rec2, rec3, rec4)
-    m = MLE_HLS(receivers = [rec1, rec2, rec3, rec4])
+    m = MLE(receivers = [rec1, rec2, rec3, rec4])
     res = m.calculate()
     
-    #print(np.around(m.MLE_calc_src(m.D_ref), decimals = 3))
-    print(np.around(res, decimals = 3))
+    print(np.around(m.calcSrc(m.D_ref), decimals = 3))
+    #print(np.around(res, decimals = 3))
 #profile.run('main()')
 
 #main()
-p = PerformanceTest(10,10,10, 1)
+p = PerformanceTest(3,3,3,0.1, allRoots = False, mleMode = MLE.Mode.MLE_HLS)
 p.excecute()
-p.printStats()
 p.plot()
-print(p.bAccurracy)
+#print(p.bAccurracy)
 
 
 
