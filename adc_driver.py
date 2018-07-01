@@ -6,7 +6,7 @@ from enum import IntEnum, IntFlag, unique
 from abc import ABC
 from functools import reduce
 from typing import Callable, Tuple
-
+import pigpio
 
 class Register(ABC):
 
@@ -164,35 +164,32 @@ class Adc(object):
     def __init__(self, cs_pin: int = 6, data_redy_pin: int = 10):
         self._cs_pin = cs_pin
         self._data_ready_pin = data_redy_pin
-
+        
+        self.pi = pigpio.pi()
+        self.spi_handle = self.pi.spi_open(0, 50000)
+        self.pi.set_mode(self._cs_pin, pigpio.OUTPUT)
+        
         self._statusReg = StatusRegister()
         self._configReg = ConfigRegister()
 
-        pass
     """Functions requiring additional hardware library for spi communication"""
-
-    @staticmethod
-    def __spi_xfer(data):
-        pass
-
-    @staticmethod
-    def __spi_write(data: int):
+    def __spi_xfer(self, data) -> Tuple[int, bytes]:
         data = data.to_bytes((data.bit_length() + 7) // 8, byteorder='big')
-        # TO DO!
-        pass
+        return self.pi.spi_xfer(self.spi_handle, data)
 
-    @staticmethod
-    def __spi_read(byte_nr) -> Tuple[int, bytes]:
-        return 1, bytes([0, 6])
+    def __spi_write(self, data: int):
+        data = data.to_bytes((data.bit_length() + 7) // 8, byteorder='big')
+        self.pi.spi_write(self.spi_handle, data)
 
+    def __spi_read(self, byte_nr) -> Tuple[int, bytes]:
+        return self.pi.spi_read(self.spi_handle, byte_nr)
+        
     def __cs_low(self):
-        # TO DO!
-        pass
+        self.pi.write(self._cs_pin, 0)
 
     def __cs_high(self):
-        # TO DO!
-        pass
-
+        self.pi.write(self._cs_pin, 1)
+        
     """ADC software functionality implementation"""
 
     def register_write(self, register: RegAddr, data: int) -> None:
@@ -200,14 +197,14 @@ class Adc(object):
         self.__spi_write(register.value | RegAccessMode.WRITE)
         self.__spi_write(data)
         self.__cs_high()
-        pass
 
     def register_read(self, register: RegAddr, size: int) -> int:
         self.__cs_low()
         self.__spi_write(register.value | RegAccessMode.READ)
         (count, data) = self.__spi_read(size)
         self.__cs_high()
-        return int.from_bytes(data, byteorder='little')
+        print("Nr:{}, data: {}".format(count, data.hex()))
+        return int.from_bytes(data, byteorder='big')
 
     def read_channel(self, channel: Channel, samples_nr: int, callback: Callable[[bytes], None]) -> None:
         pass
@@ -218,9 +215,7 @@ class Adc(object):
 
 def test():
     a = Adc()
-    print(hex(a.register_read(RegAddr.STATUS, 8)))
-    a._configReg.set_flags(ConfigRegister.Flags.CLK_DIV_1_TO_2, ConfigRegister.Flags.POWER_MODE_NORMAL)
-    print(bin(a._configReg.value))
-
+    print(ConfigRegister.Flags(a.register_read(RegAddr.CONFIG, 2)))
+    a.pi.spi_close(a.spi_handle)
 
 test()
