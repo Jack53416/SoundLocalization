@@ -5,7 +5,7 @@
 from enum import IntEnum, IntFlag, unique
 from abc import ABC
 from functools import reduce
-from typing import Callable
+from typing import Callable, Tuple
 
 
 class Register(ABC):
@@ -23,7 +23,7 @@ class Register(ABC):
 
     @property
     def value(self):
-        return self._value
+        return self._value & self.mask
 
     @property
     def mask(self):
@@ -169,6 +169,21 @@ class Adc(object):
         self._configReg = ConfigRegister()
 
         pass
+    """Functions requiring additional hardware library for spi communication"""
+
+    @staticmethod
+    def __spi_xfer(data):
+        pass
+
+    @staticmethod
+    def __spi_write(data: int):
+        data = data.to_bytes((data.bit_length() + 7) // 8, byteorder='big')
+        # TO DO!
+        pass
+
+    @staticmethod
+    def __spi_read(byte_nr) -> Tuple[int, bytes]:
+        return 1, bytes([0, 6])
 
     def __cs_low(self):
         # TO DO!
@@ -178,15 +193,21 @@ class Adc(object):
         # TO DO!
         pass
 
-    def register_write(self, register: RegAddr, data: bytes) -> None:
-        # TO DO!
+    """ADC software functionality implementation"""
+
+    def register_write(self, register: RegAddr, data: int) -> None:
+        self.__cs_low()
+        self.__spi_write(register.value | RegAccessMode.WRITE)
+        self.__spi_write(data)
+        self.__cs_high()
         pass
 
-    def register_read(self, register: RegAddr) -> bytes:
+    def register_read(self, register: RegAddr, size: int) -> int:
         self.__cs_low()
-        print(hex(register.value | RegAccessMode.READ))
+        self.__spi_write(register.value | RegAccessMode.READ)
+        (count, data) = self.__spi_read(size)
         self.__cs_high()
-        return bytes([0x0])  # TO DO!
+        return int.from_bytes(data, byteorder='little')
 
     def read_channel(self, channel: Channel, samples_nr: int, callback: Callable[[bytes], None]) -> None:
         pass
@@ -197,9 +218,9 @@ class Adc(object):
 
 def test():
     a = Adc()
-    a.register_read(RegAddr.STATUS)
-    a._configReg.set_flags(ConfigRegister.Flags.ADC_24_BITS, ConfigRegister.Flags.CLK_DIV_1_TO_4, ConfigRegister.Flags.POWER_MODE_LOW)
-    print(hex(a._configReg.value))
+    print(hex(a.register_read(RegAddr.STATUS, 8)))
+    a._configReg.set_flags(ConfigRegister.Flags.CLK_DIV_1_TO_2, ConfigRegister.Flags.POWER_MODE_NORMAL)
+    print(bin(a._configReg.value))
 
 
 test()
