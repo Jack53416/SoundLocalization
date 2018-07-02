@@ -1,6 +1,18 @@
 """
     Driver for MAX11043 simultaneous sampling analog to digital converter.
     Requires python 3.7+
+    To install python 3.8
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get dist-upgrade
+    sudo apt-get install build-essential python-dev python-setuptools python-pip python-smbus
+    sudo apt-get install build-essential libncursesw5-dev libgdbm-dev libc6-dev
+    sudo apt-get install zlib1g-dev libsqlite3-dev tk-dev
+    sudo apt-get install libssl-dev openssl
+    sudo apt-get install libffi-dev
+
+    then clone https://github.com/python/cpython
+    and follow the instructions from repository
 """
 from enum import IntEnum, IntFlag, unique
 from abc import ABC
