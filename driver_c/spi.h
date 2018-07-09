@@ -12,5 +12,9 @@ void spi_xfer(char *txData, char *rxData, size_t byteCount);
 void spi_cs_low();
 void spi_cs_high();
 
+void conv_run_high();
+void conv_run_low();
+void register_callback(void (*cb)(int, int, uint32_t));
+void remove_callback();
 
 #endif

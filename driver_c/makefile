@@ -1,5 +1,5 @@
 cc := gcc
-cxxflags := -pedantic -Wall -pthread 
+cxxflags := -pedantic -Wall -pthread
 libs := -lpigpio -lrt
 includes := registers.h spi.h driver.h
 objects := driver.o spi.o

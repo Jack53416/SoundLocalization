@@ -23,7 +23,7 @@ int spi_init(uint8_t cs, uint8_t dataReady, uint8_t convRun){
 	gpioSetMode(convRunPin, PI_OUTPUT);
 	gpioSetMode(csPin, PI_OUTPUT);
 	
-	spiHandle = spiOpen(0, 6000000, 0);
+	spiHandle = spiOpen(1, 30000000, 0);
 	return spiHandle;
 }
 
@@ -55,3 +55,18 @@ void spi_cs_high(){
 	gpioWrite(csPin, 1);
 }
 
+void conv_run_high(){
+	gpioWrite(convRunPin, 1);
+}
+
+void conv_run_low(){
+	gpioWrite(convRunPin, 0);
+}
+
+void register_callback(void (*cb)(int, int, uint32_t)){
+	gpioSetAlertFunc(dataReadyPin, (*cb));
+}
+
+void remove_callback(){
+	gpioSetAlertFunc(dataReadyPin, NULL);
+}
