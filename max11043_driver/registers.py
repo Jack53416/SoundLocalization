@@ -58,7 +58,7 @@ class Register(ABC):
 
     @property
     def value(self):
-        return self._value & self.mask
+        return self._value # & self.mask
 
     @property
     def mask(self):
@@ -125,22 +125,38 @@ class ConfigRegister(Register):
 
 
 class ChannelConfigRegister(Register):
+    def __init__(self):
+        super(ChannelConfigRegister, self).__init__(RegAddr.ADC_A_CONFIG, mask
+                                                   =0x1FFF, size=16,
+                                                    reset_value=0x0100)
     class Flags(IntFlag):
-        BIAS_VOLTAGE_33_AVDD = 0x0,
-        BIAS_VOLTAGE_35_AVDD = 0x1,
-        BIAS_VOLTAGE_38_AVDD = 0x2,
-        BIAS_VOLTAGE_40_AVDD = 0x3
-        BIAS_VOLTAGE_42_AVDD = 0x4,
-        BIAS_VOLTAGE_44_AVDD = 0x5,
-        BIAS_VOLTAGE_46_AVDD = 0x6,
-        BIAS_VOLTAGE_48_AVDD = 0x7,
-        BIAS_VOLTAGE_50_AVDD = 0x8,
-        BIAS_VOLTAGE_52_AVDD = 0x9,
-        BIAS_VOLTAGE_54_AVDD = 0xA,
-        BIAS_VOLTAGE_56_AVDD = 0xB,
-        BIAS_VOLTAGE_58_AVDD = 0xC,
-        BIAS_VOLTAGE_60_AVDD = 0xD,
-        BIAS_VOLTAGE_62_AVDD = 0xE,
-        BIAS_VOLTAGE_65_AVDD = 0xF
+        BIAS_VOLTAGE_33_AVDD = 0x0 << 9,
+        BIAS_VOLTAGE_35_AVDD = 0x1 << 9,
+        BIAS_VOLTAGE_38_AVDD = 0x2 << 9,
+        BIAS_VOLTAGE_40_AVDD = 0x3 << 9,
+        BIAS_VOLTAGE_42_AVDD = 0x4 << 9,
+        BIAS_VOLTAGE_44_AVDD = 0x5 << 9,
+        BIAS_VOLTAGE_46_AVDD = 0x6 << 9,
+        BIAS_VOLTAGE_48_AVDD = 0x7 << 9,
+        BIAS_VOLTAGE_50_AVDD = 0x8 << 9,
+        BIAS_VOLTAGE_52_AVDD = 0x9 << 9,
+        BIAS_VOLTAGE_54_AVDD = 0xA << 9,
+        BIAS_VOLTAGE_56_AVDD = 0xB << 9,
+        BIAS_VOLTAGE_58_AVDD = 0xC << 9,
+        BIAS_VOLTAGE_60_AVDD = 0xD << 9,
+        BIAS_VOLTAGE_62_AVDD = 0xE << 9,
+        BIAS_VOLTAGE_65_AVDD = 0xF << 9,
+        DIFF_NORMAL = 0x1 << 8,
+        EQ_ENABLED = 0x1 << 7,
+        ADC_MODULATOR_GAIN_2 = 0x1 << 5,
+        ADC_MODULATOR_GAIN_4 = 0x10 << 5,
+        PGA_POWERED_DOWN = 0x1 << 4,
+        USE_LP_FILTER = 0x1 << 3,
+        USE_EQ_FILTER = 0x0 << 3,
+        PGA_GAIN_16 = 0x1 << 2,
+        PGA_GAIN_8 = 0x0 << 2,
+        ENABLE_POSITIVE_BIAS = 0x1 << 1,
+        ENABLE_NEGATIVE_BIAS = 0x1
+        
 
 

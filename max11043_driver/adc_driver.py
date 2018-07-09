@@ -15,14 +15,15 @@
     and follow the instructions from repository
 """
 import pigpio
+import numpy as np
+import scipy.io.wavfile
 from typing import Callable, Tuple
-from max11043_driver.registers import *
+from registers import *
 
-
+pigScript = b'w 6 0 spiw p0 0x0 spir p0 2 w 6 1' 
 class RegAccessMode(IntFlag):
-    WRITE = 0x00,
-    READ = 0x02
-
+        WRITE = 0x00,
+        READ = 0x02
 
 class Adc(object):
     class Channel(IntFlag):
@@ -40,8 +41,11 @@ class Adc(object):
 
         self._statusReg = StatusRegister()
         self._configReg = ConfigRegister()
+        self._channelConfigReg = ChannelConfigRegister()
 
         self._samples_read: int = 0
+        self._channel_A_buffer = []
+        self._conversion_finished = False
 
     """Functions requiring additional hardware library for spi communication"""
 
@@ -58,7 +62,7 @@ class Adc(object):
 
     def __setup_hardware(self):
         self.pi = pigpio.pi()
-        self.spi_handle = self.pi.spi_open(0, 50000)
+        self.spi_handle = self.pi.spi_open(0, 20000000)
         self.pi.set_mode(self._cs_pin, pigpio.OUTPUT)
         self.pi.set_mode(self._convrun_pin, pigpio.OUTPUT)
         self.pi.set_mode(self._data_ready_pin, pigpio.INPUT)
@@ -78,10 +82,20 @@ class Adc(object):
 
     def __on_data_ready(self):
         def data_redy_cb(gpio, level, tick):
-            print(gpio, level, tick)
+            #print(gpio, level, tick)
             self._samples_read = self._samples_read + 1
-            if self._samples_read >= 128:
+            if self._samples_read >= 100000 and not self._conversion_finished:
+                print("Data Collected !")
+                self._conversion_finished = True
                 self.__convrun_low()
+                #print(tick)
+                #print(self._channel_A_buffer)
+                data = np.asarray(self._channel_A_buffer, dtype=np.int16)
+                scipy.io.wavfile.write('out.wav', 2000, data)
+                print("Done!\r\n")
+            sample = self.register_read(RegAddr.ADC_A_RES, 2)
+            #print(sample)
+            self._channel_A_buffer.append(sample)
 
         return data_redy_cb
         
@@ -98,13 +112,13 @@ class Adc(object):
         self.__spi_write(register.value | RegAccessMode.READ)
         (count, data) = self.__spi_read(size)
         self.__cs_high()
-        print("Nr:{}, data: {}".format(count, data.hex()))
+        #print("Nr:{}, data: {}".format(count, data.hex()))
         return int.from_bytes(data, byteorder='big')
 
-    def read_channel(self, channel: Channel, samples_nr: int, callback: Callable[[bytes], None]) -> None:
+    def read_channel(self, channel: Channel, samples_nr: int) -> None:
         self.__convrun_high()
 
-    def read_channel_continuous(self, channel: Channel, sample_chunk: int, callback: Callable[[bytes], None]) -> None:
+    def read_channel_continuous(self, channel: Channel, sample_chunk: int) -> None:
         pass
 
     @staticmethod
@@ -113,7 +127,30 @@ class Adc(object):
 
 def test():
     a = Adc()
-    print(ConfigRegister.Flags(a.register_read(RegAddr.CONFIG, 2)))
+    a._configReg.value = a.register_read(RegAddr.CONFIG, 2)
+    print(ConfigRegister.Flags(a._configReg.value))
+    a._configReg.set_flags(ConfigRegister.Flags.CLK_DIV_1_TO_6,
+                           ConfigRegister.Flags.CHANNEL_B_POWER_DOWN,
+                           ConfigRegister.Flags.CHANNEL_C_POWER_DOWN,
+                           ConfigRegister.Flags.CHANNEL_D_POWER_DOWN)
+    print(a._configReg.value)
+    print("hex:{}".format(hex(a._configReg.value)))
+    a.register_write(RegAddr.CONFIG, a._configReg.value)
+    read = a.register_read(RegAddr.CONFIG, 2)
+    print(hex(read))
+    a._channelConfigReg.set_flags(ChannelConfigRegister.Flags.BIAS_VOLTAGE_50_AVDD,
+                                  ChannelConfigRegister.Flags.PGA_POWERED_DOWN,
+                                  ChannelConfigRegister.Flags.DIFF_NORMAL,
+                                  ChannelConfigRegister.Flags.ENABLE_POSITIVE_BIAS,
+                                  ChannelConfigRegister.Flags.USE_LP_FILTER)
+    print("hex:{}".format(hex(a._channelConfigReg.value)))
+    a.register_write(RegAddr.ADC_A_CONFIG, a._channelConfigReg.value)
+    read = a.register_read(RegAddr.ADC_A_CONFIG, 2)
+    print(hex(read))
+    a.read_channel(a.Channel.A, 128)
+    print(a.pi.get_current_tick())
+    input("Press Enter")
+    a.__convrun_low();
     a.pi.spi_close(a.spi_handle)
 
 test()
