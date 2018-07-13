@@ -1,95 +1,79 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
-#include <unistd.h>
 #include <stdint.h>
+#include <stdbool.h>
+
 #include "registers.h"
 #include "driver.h"
 #include "spi.h"
 #include "wavWriter.h"
-#include <pigpio.h>
+#include "ciricularBuffer.h"
 
 #define LED_GPIO 23
 #define DATA_READY 13
 #define CONV_RUN 19
-#define SAMPLE_LIMIT 1000000
 #define CS_PIN 6
 
-uint32_t sampleCount = 0;
-uint16_t samples[SAMPLE_LIMIT];
+#define CHANNEL_NUMBER (uint8_t) 4
 
-int main(int argc, char *argv[]){
-	char c = ' ';
-	uint16_t reg = 0;
+static bool verifyRegister(uint8_t reg, uint16_t regValue);
 
-	hardware_init();
-	spi_init(CS_PIN, DATA_READY, CONV_RUN);
-	
-	MAX11043_reg_write(CONFIGURATION,
-			   CLK_DIV_1_TO_6 |
-		 	   DAC_POWER_DOWN |
-			   CHANNEL_B_POWER_DOWN |
-			   CHANNEL_C_POWER_DOWN |
-			   CHANNEL_D_POWER_DOWN);
+ciricularBuff16_t samples;
 
-	MAX11043_reg_write(ADC_A_CONFIG,
-			   BIAS_VOLTAGE_50_AVDD |
-			   PGA_POWERED_DOWN |
-			   DIFF_NORMAL |
-			   ENABLE_POSITIVE_BIAS |
-			   USE_LP_FILTER |
-			   EQ_DISABLED);
-	
-	reg = MAX11043_reg_read(CONFIGURATION);
-	printf("Reg :%X\r\n", reg);
-	reg = MAX11043_reg_read(ADC_A_CONFIG);
-	printf("Reg :%X\r\n", reg);
+MAX11043_STATUS MAX11043_init(uint8_t activeChannels, BitMode bitNumber, size_t sampleNr, uint16_t clkDivision){
+	uint16_t configurationReg = 0x0;
+	uint16_t channelReg = 0x0;
+	uint8_t resultSize = bitNumber * CHANNEL_NUMBER;
 
-	register_callback(MAX11043_on_sample);
-	conv_run_high();
-	while(c != 'q'){
-		c = getchar();
-	}
+	if(!(activeChannels & CHANNEL_A)){ configurationReg |= CHANNEL_A_POWER_DOWN; resultSize -= bitNumber; }
+	if(!(activeChannels & CHANNEL_B)){ configurationReg |= CHANNEL_B_POWER_DOWN; resultSize -= bitNumber; }
+	if(!(activeChannels & CHANNEL_C)){ configurationReg |= CHANNEL_C_POWER_DOWN; resultSize -= bitNumber; }
+	if(!(activeChannels & CHANNEL_D)){ configurationReg |= CHANNEL_D_POWER_DOWN; resultSize -= bitNumber; }
 
-	spi_close();
-	hardware_disable();
+	if(resultSize <= 0)
+		return ERROR_NO_ACTIVE_CHANNEL;
 
-	return 0;
-}
+	configurationReg |= clkDivision |
+		               DAC_POWER_DOWN;
 
-void *dumpToFile(void *arg){
-	write_wav("out.wav", SAMPLE_LIMIT, (short int*)samples, 41666);
-	FILE *pfile;
-	pfile = fopen("out.txt", "w");
-	if(!pfile){
-		printf("File Error!");
-		return NULL;
-	}
+	MAX11043_reg_write(CONFIGURATION, configurationReg);
 
-	for(int i = 0; i < SAMPLE_LIMIT; i++){
-		fprintf(pfile, "%u\r\n", samples[i]);
-	}
+	if(!verifyRegister(CONFIGURATION, configurationReg))
+		return ERROR_UNSUCCESSFULL_REGWRITE;
 
-	fclose(pfile);
-	printf("Finished file write\r\n");
+	channelReg  = BIAS_VOLTAGE_50_AVDD |
+				  PGA_POWERED_DOWN |
+				  DIFF_NORMAL |
+				  USE_LP_FILTER |
+				  EQ_DISABLED |
+				  ENABLE_POSITIVE_BIAS;
+
+	MAX11043_reg_write(ADC_A_CONFIG, channelReg);
+
+	if(!verifyRegister(ADC_A_CONFIG, channelReg))
+		return ERROR_UNSUCCESSFULL_REGWRITE;
+
+	MAX11043_reg_write(ADC_B_CONFIG, channelReg);
+
+	if(!verifyRegister(ADC_B_CONFIG, channelReg))
+		return ERROR_UNSUCCESSFULL_REGWRITE;;
+
+	MAX11043_reg_write(ADC_C_CONFIG, channelReg);
+
+	if(!verifyRegister(ADC_C_CONFIG, channelReg))
+		return ERROR_UNSUCCESSFULL_REGWRITE;
+
+	MAX11043_reg_write(ADC_D_CONFIG, channelReg);
+
+	if(!verifyRegister(ADC_D_CONFIG, channelReg))
+		return ERROR_UNSUCCESSFULL_REGWRITE;
+
+	ciricularBuffer16_init(&samples, sampleNr);
+
+	return STATUS_OK;
 }
 
 void MAX11043_on_sample(int GPIO, int level, uint32_t timestamp){
-	char sampleBuff[2];
-	uint16_t sample = 0;
-	if(level == 1){
-		return;
-	}
-
-	sample = MAX11043_reg_read(ADC_A_RESULT);//MAX11043_reg_read(ADC_B_RESULT);
-	samples[sampleCount] = sample;
-	sampleCount++;
-	if(sampleCount > SAMPLE_LIMIT){
-		remove_callback();
-		conv_run_low();
-		printf("DOOONE BABY\r\n");
-		gpioStartThread(dumpToFile, (void*) samples);
-	}
 }
 
 void MAX11043_reg_write(uint8_t reg, uint16_t data){
@@ -126,6 +110,52 @@ void MAX11043_flash_write(uint8_t page, uint8_t address, uint16_t data){
 }
 
 uint16_t MAX11043_flash_read(uint8_t page, uint8_t address){
+	uint16_t result = 0x0;
 
+	spi_cs_low();
+	///Wait for flash until ready
+	while(MAX11043_isFlashBusy());
+	///Write page and adress to FLASH_ADDRESS register
+	 MAX11043_reg_write(FLASH_ADDRESS, page << 8 | address);
+	///execute read content of FLASH at address (flash_address) to (data_out) register
+
+	///Wait for flash until ready
+	while(MAX11043_isFlashBusy());
+
+	/// read data from (data_out) register
+
+
+	spi_cs_high();
+	return result;
 }
+
+bool MAX11043_isFlashBusy(){
+	char flashModeValue = 0x1;
+	char flashModeReg = FLASH_MODE_SELECT | MAX11043_READ;
+	spi_xfer(&flashModeReg, &flashModeValue, 2);
+	return flashModeValue & 0x1;
+}
+
+static bool verifyRegister(uint8_t reg, uint16_t regValue){
+	uint16_t readReg = MAX11043_reg_read(reg);
+	return readReg == regValue;
+}
+
+/*static void *dumpToFile(void *arg){
+	write_wav("out.wav", SAMPLE_LIMIT, (short int*)samples, 41666);
+	FILE *pfile;
+	pfile = fopen("out.txt", "w");
+	if(!pfile){
+		printf("File Error!");
+		return NULL;
+	}
+
+	for(int i = 0; i < SAMPLE_LIMIT; i++){
+		fprintf(pfile, "%u\r\n", samples[i]);
+	}
+
+	fclose(pfile);
+	printf("Finished file write\r\n");
+}*/
+
 
