@@ -6,6 +6,7 @@
 #include "registers.h"
 #include "driver.h"
 #include "spi.h"
+#include "wavWriter.h"
 #include <pigpio.h>
 
 #define LED_GPIO 23
@@ -25,17 +26,19 @@ int main(int argc, char *argv[]){
 	spi_init(CS_PIN, DATA_READY, CONV_RUN);
 	
 	MAX11043_reg_write(CONFIGURATION,
-					   CLK_DIV_1_TO_6 |
-					   CHANNEL_B_POWER_DOWN |
-					   CHANNEL_C_POWER_DOWN |
-					   CHANNEL_D_POWER_DOWN);
+			   CLK_DIV_1_TO_6 |
+		 	   DAC_POWER_DOWN |
+			   CHANNEL_B_POWER_DOWN |
+			   CHANNEL_C_POWER_DOWN |
+			   CHANNEL_D_POWER_DOWN);
+
 	MAX11043_reg_write(ADC_A_CONFIG,
-			           BIAS_VOLTAGE_50_AVDD |
-					   PGA_POWERED_DOWN |
-					   DIFF_NORMAL |
-					   ENABLE_POSITIVE_BIAS |
-					   USE_LP_FILTER |
-					   EQ_ENABLED);
+			   BIAS_VOLTAGE_50_AVDD |
+			   PGA_POWERED_DOWN |
+			   DIFF_NORMAL |
+			   ENABLE_POSITIVE_BIAS |
+			   USE_LP_FILTER |
+			   EQ_DISABLED);
 	
 	reg = MAX11043_reg_read(CONFIGURATION);
 	printf("Reg :%X\r\n", reg);
@@ -55,6 +58,7 @@ int main(int argc, char *argv[]){
 }
 
 void *dumpToFile(void *arg){
+	write_wav("out.wav", SAMPLE_LIMIT, (short int*)samples, 41666);
 	FILE *pfile;
 	pfile = fopen("out.txt", "w");
 	if(!pfile){
@@ -67,8 +71,7 @@ void *dumpToFile(void *arg){
 	}
 
 	fclose(pfile);
-	printf("Finished!");
-	return NULL;
+	printf("Finished file write\r\n");
 }
 
 void MAX11043_on_sample(int GPIO, int level, uint32_t timestamp){
@@ -78,7 +81,7 @@ void MAX11043_on_sample(int GPIO, int level, uint32_t timestamp){
 		return;
 	}
 
-	sample = MAX11043_reg_read(ADC_A_RESULT);
+	sample = MAX11043_reg_read(ADC_A_RESULT);//MAX11043_reg_read(ADC_B_RESULT);
 	samples[sampleCount] = sample;
 	sampleCount++;
 	if(sampleCount > SAMPLE_LIMIT){
@@ -105,6 +108,16 @@ uint16_t MAX11043_reg_read(uint8_t reg){
 	spi_cs_high();
 	//printf("Read: %X, %X %X\r\n ", dataBuff[0], dataBuff[1], dataBuff[2]);
 	result = dataBuff[1] << 8 | dataBuff[2];
+	return result;
+}
+
+uint16_t MAX11043_scan_read(){
+	char dataBuff[2] = {0, 0};
+	uint16_t result = 0;
+	spi_cs_low();
+	spi_read((char*) &dataBuff, 2);
+	spi_cs_high();
+	result = dataBuff[0] << 8 | dataBuff[1];
 	return result;
 }
 
