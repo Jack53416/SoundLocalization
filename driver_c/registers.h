@@ -100,7 +100,6 @@ enum {
 enum {
 	ADC_16_BITS = 0x0,
 	ADC_24_BITS = 0x1 << 5
-
 }BitSize;
 
 enum {

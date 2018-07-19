@@ -1,8 +1,8 @@
 cc := gcc
 cxxflags := -pedantic -Wall -pthread
 libs := -lpigpio -lrt
-includes := registers.h spi.h driver.h wavWriter.h
-objects := driver.o spi.o wavWriter.o
+includes := registers.h spi.h driver.h wavWriter.h ciricularBuffer.h
+objects := driver.o spi.o wavWriter.o ciricularBuffer.o
 buildDir := build
 OBJS := $(addprefix $(buildDir)/, $(objects))
 
