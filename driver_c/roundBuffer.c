@@ -1,6 +1,8 @@
 #include "roundBuffer.h"
 #ifndef __AVR__
 #include <string.h>
+#else
+#include <DMAChannel.h>
 #endif // __AVR__
 
 static int roundBuff_reset(volatile roundBuff *self);
@@ -55,6 +57,12 @@ int roundBuff_init(volatile roundBuff *self, const size_t buffSize, const size_t
     return roundBuff_reset(self);
 }
 
+void roudBuff_incrHead(volatile roundBuff *self){
+    self->head = (self->head + 1) & (self->size - 1);
+    if(self->head == self->tail)
+        self->tail = (self->tail + 1) & (self->size - 1); // thanks to 2^n size
+}
+
 int roundBuff_put(volatile roundBuff *self, const void *data){
     if(!self || !data)
         return BUFFER_ERR_INV_PTR;
@@ -63,9 +71,7 @@ int roundBuff_put(volatile roundBuff *self, const void *data){
         return BUFFER_NOT_INITIALIZED;
 
     memcpy(self->buffer + self->head * self->elementSize, data, self->elementSize);
-    self->head = (self->head + 1) & (self->size - 1);
-    if(self->head == self->tail)
-        self->tail = (self->tail + 1) & (self->size - 1); // thanks to 2^n size
+    roudBuff_incrHead(self);
 
     return BUFFER_OK;
 }

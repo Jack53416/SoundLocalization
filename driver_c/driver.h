@@ -1,5 +1,8 @@
-#ifndef DRIVER
-#define DRIVER
+#ifndef DRIVER_H
+#define DRIVER_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum {
 	CHANNEL_A = 0x1,
@@ -16,23 +19,53 @@ typedef enum {
 typedef enum {
 	STATUS_OK,
 	ERROR_NO_ACTIVE_CHANNEL,
-	ERROR_UNSUCCESSFULL_REGWRITE
+	ERROR_UNSUCCESSFULL_REGWRITE,
+  ERROR_INVALID_BUFFER_STATE
 }MAX11043_STATUS;
 
-MAX11043_STATUS MAX11043_init(uint8_t activeChannels, BitMode bitNumber, size_t sampleNr, uint16_t clkDivision);
+typedef struct {
+  uint16_t ch1;
+  uint16_t ch2;
+}sample2_ch;
 
-void MAX11043_reg_write(uint8_t reg, uint16_t data);
-uint16_t MAX11043_reg_read(uint8_t reg);
-void MAX11043_flash_write(uint8_t page, uint8_t address, uint16_t data);
-uint16_t MAX11043_flash_read(uint8_t page, uint8_t address);
-uint16_t MAX11043_scan_read();
-bool MAX11043_isFlashBusy();
+typedef struct {
+  uint16_t ch1;
+  uint16_t ch2;
+  uint16_t ch3;
+}sample3_ch;
 
-void MAX11043_on_sample(int GPIO, int level, uint32_t timestamp);
+typedef struct {
+  uint16_t ch1;
+  uint16_t ch2;
+  uint16_t ch3;
+  uint16_t ch4;
+}sample4_ch;
+
+
+  MAX11043_STATUS MAX11043_init(uint8_t activeChannels, BitMode bitNumber, size_t sampleNr, uint16_t clkDivision);
+
+  void MAX11043_reg_write(uint8_t reg, uint16_t data);
+  uint16_t MAX11043_reg_read(uint8_t reg);
+  void MAX11043_flash_write(uint8_t page, uint8_t address, uint16_t data);
+  uint16_t MAX11043_flash_read(uint8_t page, uint8_t address);
+  uint16_t MAX11043_scan_read();
+  bool MAX11043_isFlashBusy();
+  
+  void MAX11043_read_samples(size_t sampleNr);
+  void MAX11043_read_samples_cont();
+  void MAX11043_stop_reading_samples();
+  void MAX11043_attach_interrupt();
+  void MAX11043_stop_interrupt();
+  
+  void MAX11043_on_sample();
 
 /**
  * Debug functions, not meant to use outside library
  * */
 //static void *dumpToFile(void *arg);
 
+#ifdef __cplusplus
+}
 #endif
+#endif
+

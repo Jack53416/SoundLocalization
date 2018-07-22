@@ -7,7 +7,7 @@
 #ifndef ROUNDBUFFER_H
 #define ROUNDBUFFER_H
 
-//#DEFINE __AVR__ for MCU targets
+#define __AVR__ for MCU targets
 
 #ifdef __cplusplus
 extern "C" {
@@ -79,6 +79,8 @@ int roundBuff_destroy(volatile roundBuff *self);
 /// @param count - number of elements to be recovered
 /// @return actual number of elements recovered
 size_t roundBuff_getMany(volatile roundBuff *self, void *data, const size_t count);
+
+void roudBuff_incrHead(volatile roundBuff *self);
 
 #ifdef __cplusplus
 }

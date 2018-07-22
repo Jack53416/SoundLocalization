@@ -60,7 +60,7 @@
 
 
 //STATUS REG 0x07
-enum __attribute__ ((__packed__)) {
+enum __attribute__ ((__packed__)) Status{
 	FLASH_BUSY = 0x20,
 	BOOT = 0x10,
 	OVERFLOW_A = 0x08,
@@ -68,25 +68,25 @@ enum __attribute__ ((__packed__)) {
 	OVERFLOW_C = 0x02,
 	OVERFLOW_D = 0x01
 
-}Status;
+};
 
 
 //CONFIG REG 0x08
 
 
-enum {
+enum ClkSource {
 	EXT_CLK_RESONATOR = 0x0 << 15,
 	EXT_CLK_CLOCK = 0x1 << 15
-}ClkSource;
+};
 
-enum {
+enum ClkDivision{
 	CLK_DIV_1_TO_2 = 0x0 << 13,
 	CLK_DIV_1_TO_3 = 0x1 << 13,
 	CLK_DIV_1_TO_4 = 0x2 << 13,
 	CLK_DIV_1_TO_6 = 0x3 << 13
-}ClkDivision;
+};
 
-enum {
+enum PowerMode{
 	POWER_MODE_LOW = 0x1 << 12,
 	POWER_MODE_NORMAL = 0x0 << 12,
 	CHANNEL_A_POWER_DOWN = 0x1 << 11, 
@@ -95,30 +95,30 @@ enum {
 	CHANNEL_D_POWER_DOWN = 0x1 << 8,
 	DAC_POWER_DOWN = 0x1 << 7,
 	OSC_POWER_DOWN = 0x1 << 6
-}PowerMode;
+};
 
-enum {
+enum BitSize{
 	ADC_16_BITS = 0x0,
 	ADC_24_BITS = 0x1 << 5
-}BitSize;
+};
 
-enum {
+enum ScanMode{
 	SCAN_A_CHANNEL = 0x1 << 4,
 	SCAN_B_CHANNEL = 0x1 << 3,
 	SCAN_C_CHANNEL = 0x1 << 2,
 	SCAN_D_CHANNEL = 0x1 << 1
 
-}ScanMode;
+};
 
-enum {
+enum DecimateFilter{
 	DECIMATE_FILTER_12 = 0x1,
 	DECIMATE_FILTER_24 = 0x0
 
-}DecimateFilter;
+};
 
 //CHANNEL CONFIG REGISTERS
 
-enum {
+enum ChannelBias{
 	BIAS_VOLTAGE_33_AVDD = 0x0 << 9,
 	BIAS_VOLTAGE_35_AVDD = 0x1 << 9,
 	BIAS_VOLTAGE_38_AVDD = 0x2 << 9,
@@ -135,42 +135,43 @@ enum {
 	BIAS_VOLTAGE_60_AVDD = 0xD << 9,
 	BIAS_VOLTAGE_62_AVDD = 0xE << 9,
 	BIAS_VOLTAGE_65_AVDD = 0xF << 9
-}ChannelBias;
+};
 
-enum {
+enum Diff{
 	DIFF_NORMAL = 0x1 << 8,
 	DIFF_DOUBLE_INPUT_RANGE = 0x0 << 8
-}Diff;
+};
 
-enum {
+enum Equalizer{
 	EQ_ENABLED = 0x1 << 7,
 	EQ_DISABLED = 0x0 << 7
-}Equalizer;
+};
 
-enum {
+enum ModulatorGain{
 	ADC_MOD_GAIN_1 = 0x0 << 5,
 	ADC_MOD_GAIN_2 = 0x1 << 5,
 	ADC_MOD_GAIN_4 = 0x10 << 5
-}ModulatorGain;
+};
 
-enum {
+enum PgaPower{
 	PGA_POWERED_DOWN = 0x1 << 4,
 	PGA_POWERED = 0x0 << 4
-}PgaPower;
+};
 
-enum {
+enum FilterType{
 	USE_LP_FILTER = 0x1 << 3,
 	USE_EQ_FILTER = 0x0 << 3
-}FilterType;
+};
 
-enum {
+enum PgaGain{
     PGA_GAIN_16 = 0x1 << 2,
     PGA_GAIN_8 = 0x0 << 2
-}PgaGain;
+};
 
-enum {
+enum BiasType{
     ENABLE_POSITIVE_BIAS = 0x1 << 1,
     ENABLE_NEGATIVE_BIAS = 0x1
-}BiasType;
+};
 
 #endif
+
