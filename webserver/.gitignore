@@ -1,8 +1,14 @@
 .vs/
 node_modules/
+!dist/
+
 dist/*
+!dist/public/
+
+dist/public/*
 !dist/public/css
 !dist/public/images
+
 .tscache/
 *.js
 *.js.map
