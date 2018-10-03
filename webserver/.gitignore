@@ -8,6 +8,7 @@ dist/*
 dist/public/*
 !dist/public/css
 !dist/public/images
+!dist/public/models
 
 .tscache/
 *.js
