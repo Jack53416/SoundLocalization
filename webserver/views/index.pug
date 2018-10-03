@@ -1,0 +1,60 @@
+extends layout
+include partials/mixins.pug
+block content
+	main.container(role='main')
+		.container-fluid.appBox
+			.div#app
+		.card.logBox
+			.card-header
+				h5.mb-0
+					i.fas.fa-book-open
+					button.btn.btn-link.collapsed(type='button', data-toggle='collapse', data-target='#collapseLogBody', aria-expanded='false', aria-controls='collapseTwo') Log
+			#collapseLogBody.collapse
+				.card-body
+					ul.log
+		.card
+			#SettingsCard.card-header
+				h5.mb-0
+					i.fas.fa-cog
+					button#settingsToggle.btn.btn-link(type='button', data-toggle='collapse', data-target='#collapseSettings', aria-expanded='false', aria-controls='collapseSettings') Settings
+			#collapseSettings.collapse(aria-labelledby='Settings')
+				.card-body
+					+recSettings('mic1')
+					+recSettings('mic2')
+					+recSettings('mic3')
+					+recSettings('mic4')
+					.input-group
+						.input-group-addon
+							span.input-group-text
+								b ADC sampling Rate:
+						select#samplingRateSelect.custom-select(aria-label='Select for sampling rate of the ADC')
+							option(selected='') Choose...
+							option(value='1') 41 kHz
+							option(value='2') 62 kHz
+							option(value='3') 83 kHz
+							option(value='4') 123 kHz
+					button#settings_button.btn.btn-primary Save
+		.card
+			#headingTwo.card-header
+				h5.mb-0
+					i.fas.fa-signature
+					button.btn.btn-link.collapsed(type='button', data-toggle='collapse', data-target='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo') Simulation
+			#collapseTwo.collapse(aria-labelledby='headingTwo')
+				.card-body
+					.input-group
+						.input-group-prepend
+							span.input-group-text
+								b Source Position
+						.input-group-addon
+							span.input-group-text
+								b X:
+						input#src_x.form-control(type='number', step='0.1', aria-label='X')
+						.input-group-addon
+							span.input-group-text
+								b Y:
+						input#src_y.form-control(type='number', step='0.1', aria-label='Y')
+						.input-group-addon
+							span.input-group-text
+								b Z:
+						input#src_z.form-control(type='number', step='0.1', aria-label='Z')
+						button#sim_button.btn.btn-primary Simulate propagation

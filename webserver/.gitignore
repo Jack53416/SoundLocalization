@@ -1,0 +1,9 @@
+.vs/
+node_modules/
+dist/*
+!dist/public/css
+!dist/public/images
+.tscache/
+*.js
+*.js.map
+package-lock.json

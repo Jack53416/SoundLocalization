@@ -1,0 +1,22 @@
+mixin recSettings(id)
+	.input-group
+		.input-group-prepend
+			span.input-group-text
+				b=id
+		.input-group-addon
+			span.input-group-text
+				b X:
+		input.form-control(id = id + '_x',type='number', step='0.1', aria-label='X')
+		.input-group-addon
+			span.input-group-text
+				b Y:
+		input.form-control(id = id + '_y', type='number', step='0.1', aria-label='Y')
+		.input-group-addon
+			span.input-group-text
+				b Z:
+		input.form-control(id = id + '_z', type='number', step='0.1', aria-label='Z')
+		.input-group-addon
+			span.input-group-text
+				b isReference:
+		.input-group-text
+			input(id = id + '_ref', type='checkbox', aria-label='Reference receiver checkbox')
