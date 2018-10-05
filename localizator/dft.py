@@ -1,5 +1,4 @@
 from typing import Tuple
-from scipy import fftpack as fft
 import numpy as np
 import matplotlib.pyplot as plt
 

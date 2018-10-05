@@ -1,7 +1,7 @@
 from typing import Tuple
 
 import numpy as np
-from dft import DFT
+from localizator.dft import DFT
 import matplotlib.pyplot as plt
 
 

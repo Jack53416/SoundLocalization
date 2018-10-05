@@ -1,10 +1,10 @@
-from typing import List
+from typing import List, Tuple
 from enum import Enum
 
 from matplotlib import gridspec
 from scipy.optimize import fsolve
 
-from receiver import Receiver
+from localizator.receiver import Receiver
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -53,6 +53,25 @@ class MLE(object):
 
         self.__setup_constants()
 
+    @property
+    def receivers(self) -> List[Receiver]:
+        return self._receivers
+
+    @property
+    def root_idx(self):
+        return self._chosenRootIdx
+
+    @property
+    def ref_rec(self):
+        return self._refRec
+
+    @ref_rec.setter
+    def ref_rec(self, ref_idx: int):
+        if len(self._receivers) - 1 < ref_idx < 0:
+            raise MLE.InvalidInput("Reference receiver id of {} is invalid!".format(ref_idx))
+        self._refRec = self._receivers[ref_idx]
+        self.__setup_constants()
+
     def __setup_constants(self) -> None:
 
         """Initializes constants:
@@ -63,8 +82,12 @@ class MLE(object):
 
         self._posMatrix = np.array([rec.position - self._refRec.position
                                     for rec in self._receivers if rec != self._refRec], np.float64)
+        try:
+            self._posMatrix = -np.linalg.inv(self._posMatrix)
 
-        self._posMatrix = -np.linalg.inv(self._posMatrix)
+        except np.linalg.LinAlgError:
+            raise MLE.InvalidInput("The receiver positions create singular matrix, which cannot be inversed")
+
         self._refRec_k = self._refRec.calc_k()
 
     def __apply_hls_of(self) -> np.ndarray:
