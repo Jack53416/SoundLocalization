@@ -170,7 +170,7 @@ export function updateMicrohoneMeshes(microphones: Array<Receiver>) {
 
 }
 //Real position in meters, virtual: cm
-function mapRealToVirtualCoord(realPos: Position): Position {
+export function mapRealToVirtualCoord(realPos: Position): Position {
     return {
         x: realPos.x * 100 / settings.scale.x,
         y: realPos.y * 100 / settings.scale.y,

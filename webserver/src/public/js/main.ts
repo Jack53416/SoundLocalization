@@ -46,6 +46,12 @@ let settingsButton = document.querySelector("button#settings_button");
 let simulateButton = document.querySelector("button#sim_button");
 let settingsToggleButton = document.querySelector("button#settingsToggle");
 
+wsClient.onResult = (msg: ResultMessage) => {
+    let solution = msg.roots[msg.chosenRootId]
+    let pos = Graphics.mapRealToVirtualCoord(solution.pos)
+    Graphics.markPoint(pos.x, pos.y, pos.z, 5, 0.5);
+}
+
 let microphones = [
     new Receiver({ x: 0.7625, y: 0.8, z: -1.37  }, true),
     new Receiver({x: 0.7625, y: 0.8, z: 1.37}),

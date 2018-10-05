@@ -82,9 +82,12 @@ wsServer.on('connection', (ws: ExtWebSocket) => {
             case IncomingMessageTypes.Simulate:
                 wsServer.sendTo(ClientTypes.Worker, message);
                 break;
+            case IncomingMessageTypes.Error:
+                if (ws.clientType == ClientTypes.Worker) {
+                    wsServer.sendTo(ClientTypes.GUI, message);
+                }
             default:
-                let errMsg = new ErrorMessage(ErrorTypes.InvalidMessage, `Provided type: ${incTask.type} was invalid!`);
-                ws.send(errMsg);
+                console.log("Invalid Message !")
         }
     });
 });
