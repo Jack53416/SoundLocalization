@@ -4,7 +4,8 @@ export enum IncomingMessageTypes {
     Connect = "Connect",
     Simulate = "Simulate",
     Settings = "Settings",
-    Result = "Result"
+    Result = "Result",
+    Error = "Error"
 }
 
 export enum ClientTypes {
@@ -56,4 +57,9 @@ export class ResultMessage extends IncomingMessage {
     type: IncomingMessageTypes = IncomingMessageTypes.Result;
     roots: Array<SoundSource>;
     chosenRootId: number;
+}
+
+export class ErrorMessage extends IncomingMessage {
+    type: IncomingMessageTypes = IncomingMessageTypes.Error;
+    msg: string;
 }

@@ -1,4 +1,4 @@
-import { ClientTypes, IncomingMessage, IncomingMessageTypes, ConnectMessage, ResultMessage, SettingsMessage } from '../../communication/incomingMessages';
+import { ClientTypes, IncomingMessage, IncomingMessageTypes, ConnectMessage, ResultMessage, SettingsMessage, ErrorMessage } from '../../communication/incomingMessages';
 import { Log, LogMessage } from './log';
 
 export class WebSocketClient {
@@ -29,7 +29,7 @@ export class WebSocketClient {
                 case IncomingMessageTypes.Result:
                     let resMsg: ResultMessage = <ResultMessage>msg;
                     that.log.addMessage(new LogMessage("Result",
-                        `Obtained results: ${resMsg.roots[0].pos}, ${resMsg.roots[1].pos} \r\n
+                        `Obtained results: ${JSON.stringify(resMsg.roots[0].pos)}, ${JSON.stringify(resMsg.roots[1].pos)} \r\n
                          Chosen root idx: ${resMsg.chosenRootId}`));
                     if (that.onResult !== undefined)
                         that.onResult(resMsg);
@@ -42,6 +42,13 @@ export class WebSocketClient {
                     ));
                     if (that.onSettings !== undefined)
                         that.onSettings(setMsg);
+                    break;
+                case IncomingMessageTypes.Error:
+                    let errMsg: ErrorMessage = <ErrorMessage>msg;
+                    that.log.addMessage(new LogMessage(
+                        'Error occured !',
+                        `Message: ${errMsg.msg}`
+                    ));
                     break;
                 default:
                     that.log.addMessage(new LogMessage(
