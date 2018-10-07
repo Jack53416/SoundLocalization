@@ -18,5 +18,9 @@ def __main__():
     connection = Connection()
     connection.run()
 
+def test():
+    sensorMat.start_cont_localization()
 
-__main__()
+#__main__()
+
+test()
