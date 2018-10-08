@@ -2,8 +2,31 @@ extends layout
 include partials/mixins.pug
 block content
 	main.container(role='main')
+		.container.scoreboard
+			.row
+				.col-sm-2(style="border-right: 1px solid rgba(0,0,0,.125);")
+					h1#score_p1 12
+				.col-sm-8(style="text-align: center;")
+					h1 Score
+				.col-sm-2(style="border-left: 1px solid rgba(0,0,0,.125); text-align:right;")
+					h1#score_p2 5
 		.container-fluid.appBox
-			.div#app
+			div#app
+		.card.game
+			.card-header
+				h5.mb-0
+					i.fas.fa-gamepad
+					button#gameToggle.btn.btn-link.collapsed(type='button', data-toggle='collapse', data-target='#collapseGameBody', aria-expand='false', aria-controls='collapseTwo') Game
+			#collapseGameBody.collapse
+				.card-body
+					h5#gameStatus(style="margin-bottom: 20px;") Status: Not Started
+					.input-group
+						.input-group-prepend
+							span.input-group-text
+								b Max Score
+						input#score_max.form-control(type='number', step='1', min="1", aria-label='score_max')
+						button#gameStart.btn.btn-success(type='button', style="margin-left:20px;") Start Game
+						button#gameStop.btn.btn-dark(type='button', style="margin-left:20px;") Stop Game
 		.card.logBox
 			.card-header
 				h5.mb-0
@@ -23,6 +46,7 @@ block content
 					+recSettings('mic2')
 					+recSettings('mic3')
 					+recSettings('mic4')
+					+dimensionSettings('table')
 					.input-group
 						.input-group-addon
 							span.input-group-text
@@ -48,13 +72,13 @@ block content
 						.input-group-addon
 							span.input-group-text
 								b X:
-						input#src_x.form-control(type='number', step='0.1', aria-label='X')
+						input#src_x.form-control(type='number', step='0.01', aria-label='X')
 						.input-group-addon
 							span.input-group-text
 								b Y:
-						input#src_y.form-control(type='number', step='0.1', aria-label='Y')
+						input#src_y.form-control(type='number', step='0.01', aria-label='Y')
 						.input-group-addon
 							span.input-group-text
 								b Z:
-						input#src_z.form-control(type='number', step='0.1', aria-label='Z')
+						input#src_z.form-control(type='number', step='0.01', aria-label='Z')
 						button#sim_button.btn.btn-primary Simulate propagation
