@@ -49,7 +49,7 @@ class Messages:
         return json.dumps(msg).encode("utf-8")
 
 
-server = "192.168.0.101"  # Server IP Address or domain eg: tabvn.com
+server = "10.128.99.64"  # Server IP Address or domain eg: tabvn.com
 port = 8081  # Server Port
 
 

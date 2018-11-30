@@ -21,6 +21,6 @@ def __main__():
 def test():
     sensorMat.start_cont_localization()
 
-#__main__()
+__main__()
 
-test()
+#test()
