@@ -8,7 +8,7 @@ sensorMat = SensorMatrix([
     (0, 0, 0),
     (0, 2, 0),
     (0, 0, 3)
-])
+], debug=True)
 
 
 def __main__():
@@ -19,8 +19,8 @@ def __main__():
     connection.run()
 
 def test():
-    sensorMat.start_cont_localization()
+    sensorMat.start_cont_localization(input_src="wav", filename="samples/sampleSession.wav")
 
-__main__()
+#__main__()
 
-#test()
+test()

@@ -39,6 +39,11 @@ def gcc_phat(input_signal: np.ndarray, ref_signal: np.ndarray, dft: DFT, phat: b
     return delay, histogram
 
 
+def running_mean(x, N):
+    cumsum = np.cumsum(np.insert(x, 0, 0))
+    return (cumsum[N:] - cumsum[:-N]) / float(N)
+
+
 def _test_gcc_phat():
     freq = 500
     fs = 44100
@@ -159,5 +164,5 @@ def butter_bandpass_filter(data, lowcut, highcut, fs=44166, order=5):
 #_test_gcc_phat()
 
 
-recognize_test()
+#recognize_test()
 
