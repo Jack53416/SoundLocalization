@@ -1,6 +1,5 @@
 from typing import Tuple
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class DFT:
@@ -12,6 +11,7 @@ class DFT:
         self._window = np.hanning(self.size)
         self._dtfSize = self.size // 2 + 1
         self._samplingRate = sampling_rate
+        self._frequencies = np.linspace(0, self._samplingRate, self._size)
 
     def transform(self, signal: np.ndarray) -> np.ndarray:
         if len(signal) != self._size:
@@ -25,8 +25,7 @@ class DFT:
                                            .format(len(fft_transform), self._dtfSize))
 
         amp_spectrum = abs(fft_transform) * 4 / self._size
-        frequencies = np.linspace(0, self._samplingRate, self._size)
-        return frequencies[0:self._dtfSize], amp_spectrum
+        return self._frequencies[0:self._dtfSize], amp_spectrum
 
     def amplitude_spectrum(self, signal: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         dft = self.transform(signal)
@@ -38,7 +37,7 @@ class DFT:
                                            .format(len(fft_transform), self._dtfSize))
 
         result = np.fft.irfft(fft_transform, n=padding_factor * self._size)
-        #result[0] = 0  # Bit Questionable is it ?
+        # result[0] = 0  # Bit Questionable is it ?
         return result
 
     @property
@@ -67,6 +66,7 @@ class DFT:
 
 
 def test():
+    import matplotlib.pyplot as plt
     freq = 500
     fs = 44100
     n_fft = 1024
@@ -77,7 +77,6 @@ def test():
     spectrum = dft.amplitude_spectrum(np.array(data))
 
     plt.plot(spectrum[0], spectrum[1], 'b.-', label='Hann filtered')
-
     plt.xlim(-0.01, 5000)
 
     plt.xlabel('frequency')
@@ -86,4 +85,3 @@ def test():
     plt.legend(loc=0)
     plt.show()
 
-# test()
