@@ -16,7 +16,7 @@ class Receiver(object):
     isSimulation: bool = False
 
     def __init__(self, pos_x: np.float64, pos_y: np.float64, pos_z: np.float64, is_reference: bool = False,
-                 buffer_size: int = 4096, received_time: np.longfloat = 0):
+                 buffer_size: int = 3, received_time: np.longfloat = 0):
 
         self._pos_x, self._pos_y, self._pos_z = pos_x, pos_y, pos_z
         self._isReference = is_reference
@@ -25,7 +25,7 @@ class Receiver(object):
         self.tDoA: float = 0.0
 
         self.receive()
-        self.data_buffer = deque(maxlen=buffer_size)
+        self.data_buffer = [] # deque(maxlen=buffer_size)
 
     @property
     def is_reference(self) -> bool:
