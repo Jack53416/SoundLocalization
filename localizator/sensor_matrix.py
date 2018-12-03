@@ -6,7 +6,7 @@ from typing import Tuple, List
 from localizator.receiver import Receiver
 from localizator.dft import DFT
 from localizator.MLE import MLE
-from localizator.math_tools import gcc_phat, running_mean
+from localizator.math_tools import gcc_phat, running_mean, xcorr
 
 
 class SensorMatrix(object):
@@ -36,7 +36,7 @@ class SensorMatrix(object):
             "resultSize_bytes": 2
         }
         self._recognition_settings = {
-            "lowSpectrum": 10000,
+            "lowSpectrum": 8000,
             "highSpectrum": 15000,
             "minPart": 0.05,
             "noiseFloor": 5000
@@ -64,7 +64,7 @@ class SensorMatrix(object):
                         self._evt_chunk_idxs.append(idx)
                 if self.debug:
                     import matplotlib.pyplot as plt
-                    plt.plot(self.remove_noise(self._memory_buff), 'b.-')
+                    plt.plot(self._memory_buff, 'b.-')
                     for idx in self._evt_chunk_idxs:
                         plt.axvspan(idx * self._dft.size, (idx + 1) * self._dft.size - 1,
                                     facecolor='#2ca02c', alpha=0.5)
@@ -135,23 +135,25 @@ class SensorMatrix(object):
 
     def is_event_detected(self, dft_signal: np.ndarray) -> bool:
         """Detects if the ping pong ball hit was registered. This is done in a simple fashion by taking into account
-           only frequencies from certain range specified in recognition settings and checking if the the total magnitude
-           from this range exceeds the threshold in regards of the whole signal. Furthermore noise floor is considered
-           and signals with lower total magnitude across all frequencies are ignored"""
+           only frequencies from certain range specified in recognition settings. Then the spectrum is calculated and
+           smoothed by moving average and compared via normalized cross-correlation to the saved sound pattern"""
 
         spectrum = self._dft.get_spectrum(dft_signal)
         pos_l = bisect_left(spectrum[0], self._recognition_settings["lowSpectrum"])
         pos_h = bisect_left(spectrum[0], self._recognition_settings["highSpectrum"])
 
-        freq_s = sum(spectrum[1])
-        high_f = sum(spectrum[1][pos_l:pos_h:]) # / freq_s
-        if high_f >= self._recognition_settings["noiseFloor"]:
+        high_f = np.mean(spectrum[1][pos_l:pos_h:])# / freq_s
+        high_spectr = spectrum[1][pos_l:pos_h:]
+        high_spectr = running_mean(high_spectr, 25)
+
+        searchedSound = np.load("SoundData.npy")
+        correlation = xcorr(searchedSound, high_spectr)
+        print(correlation)
+
+        if xcorr(searchedSound, high_spectr) > 0.8 and high_f > 45:
             if self.debug:
                 import matplotlib.pyplot as plt
-                print("Match")
-                print("high ratio:{} sigLvl: {}".format(high_f, freq_s))
-                plt.plot(spectrum[0], spectrum[1], 'b.-', label='Hann filtered')
-                plt.axvspan(1.25, 1.55, facecolor='#2ca02c', alpha=0.5)
+                plt.plot(high_spectr)
                 plt.show()
             return True
 
@@ -161,30 +163,28 @@ class SensorMatrix(object):
         """Calculates TDoA between all receivers and reference one in the sensor matrix. Results are stored within
            receiver object"""
 
-        #self._mle_calc.ref_rec.data_buffer = self.remove_noise(self._mle_calc.ref_rec.data_buffer, 20000)
         recs = self._mle_calc.receivers
 
         for rec_idx in range(0, self._serial_settings["channelNr"]):
             if recs[rec_idx].is_reference:
                 continue
-          #  recs[rec_idx].data_buffer = self.remove_noise(recs[rec_idx].data_buffer, 20000)
+
             delay, hist = gcc_phat(recs[rec_idx].data_buffer, dft_sig_reference, self._dft, phat=True,
                                    delay_in_seconds=True, buffered_dft=True)
-            if self.debug:
-                print(delay * self._dft.sampling_rate)
-
             recs[rec_idx].tDoA = delay
-        import matplotlib.pyplot as plt
-        plt.subplot(311)
-        plt.plot(recs[0].data_buffer, label="signal")
-        plt.plot(recs[1].data_buffer, label="delayed")
-        plt.subplot(312)
-        plt.plot(recs[0].data_buffer, label="signal")
-        plt.plot(recs[2].data_buffer, label="delayed")
-        plt.subplot(313)
-        plt.plot(recs[0].data_buffer, label="signal")
-        plt.plot(recs[3].data_buffer, label="delayed")
-        plt.show()
+            if self.debug:
+                print(delay)
+                import matplotlib.pyplot as plt
+                plt.subplot(311)
+                plt.plot(recs[0].data_buffer, label="signal")
+                plt.plot(recs[1].data_buffer, label="delayed")
+                plt.subplot(312)
+                plt.plot(recs[0].data_buffer, label="signal")
+                plt.plot(recs[2].data_buffer, label="delayed")
+                plt.subplot(313)
+                plt.plot(recs[0].data_buffer, label="signal")
+                plt.plot(recs[3].data_buffer, label="delayed")
+                plt.show()
 
     def estimate_src_position(self) -> List[np.ndarray]:
         r1 = self._mle_calc.calculate()
