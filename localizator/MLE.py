@@ -41,6 +41,8 @@ class MLE(object):
 
         self._receivers = receivers
         self._refRec = receivers[reference_rec_id]
+        self._refRec.is_reference = True
+
         self._posMatrix = None  # -inv(C) matrix
         self._refRec_k = None
         self._estimatedPositions = []
@@ -69,7 +71,9 @@ class MLE(object):
     def ref_rec(self, ref_idx: int):
         if len(self._receivers) - 1 < ref_idx < 0:
             raise MLE.InvalidInput("Reference receiver id of {} is invalid!".format(ref_idx))
+        self.ref_rec.is_reference = False
         self._refRec = self._receivers[ref_idx]
+        self._refRec.is_reference = True
         self.__setup_constants()
 
     def __setup_constants(self) -> None:
