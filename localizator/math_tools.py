@@ -161,6 +161,12 @@ def butter_bandpass_filter(data, lowcut, highcut, fs=44166, order=5):
     y = sosfilt(sos, data)
     return y
 
+
+def xcorr(a: np.ndarray, b: np.ndarray) -> float:
+    a = (a - np.mean(a)) / (np.std(a) * len(a))
+    b = (b - np.mean(b)) / np.std(b)
+    return np.max(np.correlate(a, b))
+
 #_test_gcc_phat()
 
 
