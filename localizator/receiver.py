@@ -1,5 +1,6 @@
 from typing import Tuple
 import numpy as np
+import json
 from collections import deque
 
 
@@ -12,13 +13,27 @@ class Receiver(object):
 
     c: np.float64 = 340.0  # m/x
 
-    def __init__(self, pos_x: np.float64, pos_y: np.float64, pos_z: np.float64, buffer_size: int = 4096,
-                 received_time: np.longfloat = 0):
+    isSimulation: bool = False
+
+    def __init__(self, pos_x: np.float64, pos_y: np.float64, pos_z: np.float64, is_reference: bool = False,
+                 buffer_size: int = 3, received_time: np.longfloat = 0):
 
         self._pos_x, self._pos_y, self._pos_z = pos_x, pos_y, pos_z
+        self._isReference = is_reference
         self._received_time: np.float64 = np.float64(received_time)
+        # public TDOA time variable between this microphone and reference one
+        self.tDoA: float = 0.0
+
         self.receive()
-        self.data_buffer = deque(maxlen=buffer_size)
+        self.data_buffer = [] # deque(maxlen=buffer_size)
+
+    @property
+    def is_reference(self) -> bool:
+        return self._isReference
+
+    @is_reference.setter
+    def is_reference(self, is_ref: bool):
+        self._isReference = is_ref
 
     @property
     def position(self) -> np.ndarray:
@@ -32,10 +47,11 @@ class Receiver(object):
 
         self._pos_x, self._pos_y, self._pos_z = pos[0], pos[1], pos[2]
 
-    def dist(self, other: 'Receiver') -> np.float64:
+    def dist(self, other: 'Receiver') -> np.float:
         """Expresses the distance between two microphones in terms of TDoA between them"""
-
-        return np.float64((self._received_time - other._received_time) * Receiver.c)
+        if Receiver.isSimulation:
+            return (self._received_time - other._received_time) * Receiver.c
+        return self.tDoA * Receiver.c
 
     def calc_k(self) -> float:
         return self._pos_x ** 2 + self._pos_y ** 2 + self._pos_z ** 2
@@ -45,6 +61,16 @@ class Receiver(object):
 
         src = Receiver.get_source_position()
         self._received_time = np.round(np.linalg.norm(self.position - src) / Receiver.c, 6)  # seconds
+
+    @property
+    def json(self) -> str:
+        obj = {
+            "x": self._pos_x,
+            "y": self._pos_y,
+            "z": self._pos_z,
+            "isReference": self._isReference
+        }
+        return json.dumps(obj)
 
     @classmethod
     def set_source_position(cls, src_position: Tuple[float, float, float] = (srcX, srcY, srcZ)):
