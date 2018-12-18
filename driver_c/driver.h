@@ -42,27 +42,21 @@ typedef struct {
 }sample4_ch;
 
 
-  MAX11043_STATUS MAX11043_init(uint8_t activeChannels, BitMode bitNumber, size_t sampleNr, uint16_t clkDivision);
+MAX11043_STATUS MAX11043_init(uint8_t activeChannels, size_t sampleNr, uint16_t clkDivision);
 
-  void MAX11043_reg_write(uint8_t reg, uint16_t data);
-  uint16_t MAX11043_reg_read(uint8_t reg);
-  void MAX11043_flash_write(uint8_t page, uint8_t address, uint16_t data);
-  uint16_t MAX11043_flash_read(uint8_t page, uint8_t address);
-  uint16_t MAX11043_scan_read();
-  bool MAX11043_isFlashBusy();
-  
-  void MAX11043_read_samples(size_t sampleNr);
-  void MAX11043_read_samples_cont();
-  void MAX11043_stop_reading_samples();
-  void MAX11043_attach_interrupt();
-  void MAX11043_stop_interrupt();
-  
-  void MAX11043_on_sample();
+void MAX11043_reg_write(const uint8_t reg, const uint32_t data, bool toggleCS);
+uint32_t MAX11043_reg_read(const uint8_t reg, bool toggleCS);
+void MAX11043_flash_write(uint8_t page, uint8_t address, uint16_t data);
+uint16_t MAX11043_flash_read(uint8_t page, uint8_t address);
+uint16_t MAX11043_scan_read();
+bool MAX11043_isFlashBusy();
 
-/**
- * Debug functions, not meant to use outside library
- * */
-//static void *dumpToFile(void *arg);
+void MAX11043_read_samples_cont();
+void MAX11043_stop_reading_samples();
+void MAX11043_attach_interrupt();
+void MAX11043_stop_interrupt();
+
+void MAX11043_on_sample();
 
 #ifdef __cplusplus
 }
