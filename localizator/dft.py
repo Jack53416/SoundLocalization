@@ -14,8 +14,8 @@ class DFT:
         self._frequencies = np.linspace(0, self._samplingRate, self._size)
 
     def transform(self, signal: np.ndarray) -> np.ndarray:
-        if len(signal) != self._size:
-            raise self.InvalidSignalLength("Length:{} different than saved dft size:{}".format(len(signal), self._size))
+        if len(signal) < self._size:
+            raise self.InvalidSignalLength("Length:{} smaller than saved dft size:{}".format(len(signal), self._size))
 
         return np.fft.rfft(signal * self._window)
 

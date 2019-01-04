@@ -4,10 +4,10 @@ from localizator.sensor_matrix import SensorMatrix
 from localizator.connection import Connection, App
 
 sensorMat = SensorMatrix([
-    (1, 0, 0),
-    (0, 0, 0),
-    (0, 2, 0),
-    (0, 0, 3)
+    (0.0, 0.0, 0.72),
+    (0.0, 1.11, 1.0),
+    (1.15, 1.11, 0.72),
+    (1.14, 0.0, 0.72)
 ], debug=True)
 
 
@@ -18,8 +18,9 @@ def __main__():
     connection = Connection()
     connection.run()
 
+
 def test():
-    sensorMat.start_cont_localization(input_src="wav", filename="samples/sampleSession.wav")
+    sensorMat.start_cont_localization(input_src="wav", filename="samples/finalTest02.wav")
 
 #__main__()
 

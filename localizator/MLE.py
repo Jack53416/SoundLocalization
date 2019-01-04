@@ -140,7 +140,6 @@ class MLE(object):
         # V matrix
         self._dist_matrix = np.array([[rec.dist(self._refRec)] for rec in self._receivers if rec != self._refRec],
                                      np.float64)
-
         if calc_mode == MLE.CalcMode.MLE_SOLVER:
             self._d_ref = fsolve(lambda d: self.__mle_distance_equation(d), np.array([-40, 40]))
         else:

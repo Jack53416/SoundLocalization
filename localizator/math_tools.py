@@ -162,6 +162,16 @@ def butter_bandpass_filter(data, lowcut, highcut, fs=44166, order=5):
     return y
 
 
+def remove_noise(self, signal: np.ndarray, treshold = 2500):
+    result = np.array(signal)
+    tmp = np.abs(signal)
+    tmp = running_mean(tmp, 15)
+    for [idx, val] in enumerate(tmp):
+        if val <= treshold:
+            result[idx] = 0
+    return result
+
+
 def xcorr(a: np.ndarray, b: np.ndarray) -> float:
     a = (a - np.mean(a)) / (np.std(a) * len(a))
     b = (b - np.mean(b)) / np.std(b)
