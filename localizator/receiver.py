@@ -2,6 +2,15 @@ from typing import Tuple
 import numpy as np
 import json
 from collections import deque
+import itertools
+
+
+class SliceDeck(deque):
+    def __getitem__(self, index):
+        try:
+            return deque.__getitem__(self, index)
+        except TypeError:
+            return type(self)(itertools.islice(self, index.start, index.stop))
 
 
 class Receiver(object):
@@ -12,10 +21,11 @@ class Receiver(object):
     srcZ: np.float64 = -10.0
     c: np.float64 = 340.0  # m/x
 
+    decimal_num: int = 5
     isSimulation: bool = False
 
     def __init__(self, pos_x: np.float64, pos_y: np.float64, pos_z: np.float64, is_reference: bool = False,
-                 buffer_size: int = 2, received_time: np.longfloat = 0):
+                 buffer_size: int = 2 * 4096, received_time: np.longfloat = 0):
 
         self._pos_x, self._pos_y, self._pos_z = pos_x, pos_y, pos_z
         self._isReference = is_reference
@@ -24,7 +34,7 @@ class Receiver(object):
         self.tDoA: float = 0.0
 
         self.receive()
-        self.data_buffer = deque(maxlen=buffer_size)
+        self.data_buffer = SliceDeck(maxlen=buffer_size)
 
     @property
     def is_reference(self) -> bool:
@@ -49,7 +59,7 @@ class Receiver(object):
     def dist(self, other: 'Receiver') -> np.float:
         """Expresses the distance between two microphones in terms of TDoA between them"""
         if Receiver.isSimulation:
-            return (self._received_time - other._received_time) * Receiver.c
+            return np.around((self._received_time - other._received_time) * Receiver.c, Receiver.decimal_num)
         return self.tDoA * Receiver.c
 
     def calc_k(self) -> float:
@@ -57,9 +67,8 @@ class Receiver(object):
 
     def receive(self) -> None:
         """Simulates the the received time offset, based on src position class variables"""
-
         src = Receiver.get_source_position()
-        self._received_time = np.round(np.linalg.norm(self.position - src) / Receiver.c, 6)  # seconds
+        self._received_time = np.linalg.norm(self.position - src) / Receiver.c
 
     @property
     def json(self) -> str:
