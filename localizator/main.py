@@ -20,7 +20,7 @@ def __main__():
 
 
 def test():
-    sensorMat.start_cont_localization(input_src="wav", filename="samples/finalTest02.wav")
+    sensorMat.start_cont_localization(input_src="wav", filename="samples/finalTest05.wav")
 
 #__main__()
 
