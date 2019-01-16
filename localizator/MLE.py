@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Callable
 from enum import Enum
 
 from matplotlib import gridspec
@@ -25,7 +25,8 @@ class MLE(object):
     class InvalidInput(Exception):
         pass
 
-    def __init__(self, receivers: List[Receiver] = None, reference_rec_id: int = 0, mode: Mode = Mode.MLE_HLS):
+    def __init__(self, receivers: List[Receiver], src_conditions:Callable[[np.ndarray], bool] = None,
+                 reference_rec_id: int = 0, mode: Mode = Mode.MLE_HLS):
 
         if receivers is None:
             receivers = []
@@ -39,6 +40,7 @@ class MLE(object):
         if not isinstance(mode, Enum):
             raise MLE.InvalidInput("Mode is not instance of MLE.Mode enum class")
 
+        self.condition_fun = src_conditions
         self._receivers = receivers
         self._refRec = receivers[reference_rec_id]
         self._refRec.is_reference = True
@@ -99,18 +101,28 @@ class MLE(object):
            lowest OF value is returned"""
 
         src_positions = [self.__calc_src(D).flatten() for D in self._d_ref]
-        of_solutions = np.array([0, 0])
+        src_positions = np.around(src_positions, 2)
+        of_solutions = np.array([0.0, 0.0], np.float64)
+        d = [np.linalg.norm(rec.position - src_pos) for rec in self._receivers for src_pos in src_positions]
+        d = [d[0::2], d[1::2]]
 
-        for i in range(0, len(self._receivers) - 2):
-            for j in range(1, len(self._receivers) - 1):
-                di = [np.linalg.norm(self._receivers[i].position - src_pos) for src_pos in src_positions]
-                dj = [np.linalg.norm(self._receivers[j].position - src_pos) for src_pos in src_positions]
-                tij = self._receivers[i]._received_time - self._receivers[j]._received_time
-                of_solutions = [of_solutions[0] + (di[0] - dj[0] - tij * Receiver.c) ** 2,
-                                of_solutions[1] + (di[1] - dj[1] - tij * Receiver.c) ** 2]
+        if Receiver.isSimulation:
+            for i in range(1, len(self.receivers)):
+                self.receivers[i].tDoA = np.around(self.receivers[i]._received_time - self.receivers[0]._received_time,
+                                                   Receiver.decimal_num)
+
+        for i in range(1, len(self._receivers)):
+            of_solutions[0] += (d[0][i] - d[0][0] - self.receivers[i].tDoA * Receiver.c) ** 2
+            of_solutions[1] += (d[1][i] - d[1][0] - self.receivers[i].tDoA * Receiver.c) ** 2
 
         self._estimatedPositions = src_positions
         self._chosenRootIdx = np.argmin(of_solutions)
+
+        if self.condition_fun is not None:
+            user_cond_met = [self.condition_fun(res.flatten()) for res in self._estimatedPositions]
+            if user_cond_met[0] and not user_cond_met[1]:
+                self._chosenRootIdx = np.argwhere(user_cond_met)
+
         return src_positions[int(self._chosenRootIdx)]
 
     def __calc_src(self, d: np.float64) -> np.ndarray:
@@ -210,12 +222,12 @@ class PerformanceTest(object):
     def execute(self) -> None:
         """Performs the actual simulation in the cuboid"""
 
-        for xPos in np.arange(self.xStart, self.xStart + self.xRange + self.delta, self.delta):
+        for xPos in np.around(np.arange(self.xStart, self.xStart + self.xRange + self.delta, self.delta), 2):
             # change X pos
             print(xPos)
-            for yPos in np.arange(self.yStart, self.yStart + self.yRange + self.delta, self.delta):
+            for yPos in np.around(np.arange(self.yStart, self.yStart + self.yRange + self.delta, self.delta), 2):
                 # change Y pos
-                for zPos in np.arange(self.zStart, self.zStart + self.zRange + self.delta, self.delta):
+                for zPos in np.around(np.arange(self.zStart, self.zStart + self.zRange + self.delta, self.delta),2):
                     # change Z pos
                     self.setup_source_position(xPos, yPos, zPos)
                     pos = self.localizer.calculate(self.mle_calc_mode)
@@ -296,7 +308,7 @@ class PerformanceTest(object):
         ax1.axis('equal')
 
         plt.tight_layout()
-        # plt.show()
+        #plt.show()
         plt.savefig('mle_performance.png', transparent=True)
 
     def calc_stats(self) -> None:
@@ -310,10 +322,10 @@ class PerformanceTest(object):
 
 
 def __test_mle():
-    rec1 = Receiver(np.float64(-1.0), np.float64(-1.0), np.float64(0.0))
-    rec2 = Receiver(np.float64(-1.0), np.float64(1.0), np.float64(0.0))
-    rec3 = Receiver(np.float64(1.0), np.float64(-1.0), np.float64(2.0))
-    rec4 = Receiver(np.float64(1.0), np.float64(1.0), np.float64(0.0))
+    rec1 = Receiver(np.float64(-1.18 / 2), np.float64(-1.11 / 2), np.float64(0.72))
+    rec2 = Receiver(np.float64(-1.18 / 2), np.float64(1.11 / 2), np.float64(1.0))
+    rec3 = Receiver(np.float64(1.15 - 1.18/2), np.float64(1.11 / 2), np.float64(0.72))
+    rec4 = Receiver(np.float64(1.14 - 1.18/2), np.float64(-1.11 / 2), np.float64(0.72))
 
     m = MLE(receivers=[rec1, rec2, rec3, rec4])
     res = m.calculate()
@@ -322,7 +334,8 @@ def __test_mle():
 
 
 def __full_performance_test():
-    p = PerformanceTest(3, 5, 0, 0.1, all_roots=False, mle_mode=MLE.Mode.MLE_HLS,
+    Receiver.isSimulation = True
+    p = PerformanceTest(4, 4, 0, 0.1, all_roots=False, mle_mode=MLE.Mode.MLE_HLS,
                         mle_calc_mode=MLE.CalcMode.MLE_COMPUTATION)
     p.execute()
     p.plot()
