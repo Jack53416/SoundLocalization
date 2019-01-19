@@ -2,6 +2,8 @@ from typing import Tuple
 import numpy as np
 import json
 from collections import deque
+from uncertainties import unumpy as unp
+from uncertainties import ufloat
 import itertools
 
 
@@ -19,15 +21,20 @@ class Receiver(object):
     srcX: np.float64 = -10.0
     srcY: np.float64 = -10.0
     srcZ: np.float64 = -10.0
-    c: np.float64 = 340.0  # m/x
+    c: np.float64 = 343.0  # m/x
 
     decimal_num: int = 5
+    x_pos_err = 0.005
+    y_pos_err = 0.005
+    z_pos_err = 0.005
+
     isSimulation: bool = False
 
     def __init__(self, pos_x: np.float64, pos_y: np.float64, pos_z: np.float64, is_reference: bool = False,
                  buffer_size: int = 2 * 4096, received_time: np.longfloat = 0):
 
-        self._pos_x, self._pos_y, self._pos_z = pos_x, pos_y, pos_z
+        self._pos_x, self._pos_y, self._pos_z = ufloat(pos_x, Receiver.x_pos_err), ufloat(pos_y, Receiver.y_pos_err), \
+                                                ufloat(pos_z, Receiver.z_pos_err)
         self._isReference = is_reference
         self._received_time: np.float64 = np.float64(received_time)
         # public TDOA time variable between this microphone and reference one
@@ -47,8 +54,8 @@ class Receiver(object):
     @property
     def position(self) -> np.ndarray:
         """Return the current position of the receiver (x,y,z)"""
-
-        return np.array([self._pos_x, self._pos_y, self._pos_z])
+        pos = [self._pos_x, self._pos_y, self._pos_z]
+        return unp.umatrix(unp.nominal_values(pos), unp.std_devs(pos))
 
     @position.setter
     def position(self, pos: Tuple[float, float, float]) -> None:
@@ -68,7 +75,7 @@ class Receiver(object):
     def receive(self) -> None:
         """Simulates the the received time offset, based on src position class variables"""
         src = Receiver.get_source_position()
-        self._received_time = np.linalg.norm(self.position - src) / Receiver.c
+        self._received_time = np.linalg.norm(unp.nominal_values(self.position) - src) / Receiver.c
 
     @property
     def json(self) -> str:

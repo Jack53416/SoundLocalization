@@ -2,14 +2,15 @@ import numpy as np
 import serial
 import struct
 from bisect import bisect_left
-from collections import deque
 from typing import Tuple, List, NamedTuple, Sized, Iterable
-import itertools
+
 from localizator.receiver import Receiver, SliceDeck
 from localizator.dft import DFT
 from localizator.MLE import MLE
 from localizator.math_tools import gcc_phat
 from localizator.sound_detector import SoundDetector
+
+from uncertainties import ufloat
 
 import matplotlib.pyplot as plt
 import librosa
@@ -90,7 +91,7 @@ class SensorMatrix(object):
                                      for rec in receiver_coords]
         debug_buff_size = 120 * data_chunk
         self._sound_detector = SoundDetector(0.9993, debug_buff_size)
-        self._mle_calc = MLE(receivers, src_conditions=lambda src: 0 <= src[2] < 3.0, reference_rec_id=reference_rec_id)
+        self._mle_calc = MLE(receivers, src_conditions=lambda src: 0 <= src[2] < 1.5, reference_rec_id=reference_rec_id)
         self._data_chunk = 4096
         self._dft = DFT(512, sampling_freq)
         self._rec_dft_buff = np.array([])
@@ -229,7 +230,7 @@ class SensorMatrix(object):
 
             delay, hist = gcc_phat(bounce_data[rec_idx], bounce_data[0], self._dft, phat=True,
                                    delay_in_seconds=True, buffered_dft=False)
-            self._mle_calc.receivers[rec_idx].tDoA = delay
+            self._mle_calc.receivers[rec_idx].tDoA = ufloat(delay, 0.000024)
         if not self.debug:
             print(delay)
             plt.figure(figsize=(18, 10))

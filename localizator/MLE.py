@@ -1,4 +1,4 @@
-from typing import List, Tuple, Callable
+from typing import List, Callable
 from enum import Enum
 
 from matplotlib import gridspec
@@ -10,6 +10,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 # noinspection PyUnresolvedReferences
 from mpl_toolkits.mplot3d import Axes3D
+from uncertainties import unumpy as unp
+from uncertainties import umath
 
 
 class MLE(object):
@@ -87,9 +89,11 @@ class MLE(object):
            K = xi^2 + yi^2 + zi^2"""
 
         self._posMatrix = np.array([rec.position - self._refRec.position
-                                    for rec in self._receivers if rec != self._refRec], np.float64)
+                                    for rec in self._receivers if rec != self._refRec], object)
+
+        self._posMatrix = unp.umatrix(unp.nominal_values(self._posMatrix), unp.std_devs(self._posMatrix))
         try:
-            self._posMatrix = -np.linalg.inv(self._posMatrix)
+            self._posMatrix = -self._posMatrix.I
 
         except np.linalg.LinAlgError:
             raise MLE.InvalidInput("The receiver positions create singular matrix, which cannot be inversed")
@@ -100,10 +104,10 @@ class MLE(object):
         """Evaluates OF function for src positions returned by MLE equation, solution with
            lowest OF value is returned"""
 
-        src_positions = [self.__calc_src(D).flatten() for D in self._d_ref]
-        src_positions = np.around(src_positions, 2)
+        src_positions_err = [self.__calc_src(D).flatten() for D in self._d_ref]
+        src_positions = np.around(unp.nominal_values(src_positions_err), 2)
         of_solutions = np.array([0.0, 0.0], np.float64)
-        d = [np.linalg.norm(rec.position - src_pos) for rec in self._receivers for src_pos in src_positions]
+        d = [np.linalg.norm(unp.nominal_values(rec.position) - src_pos) for rec in self._receivers for src_pos in src_positions]
         d = [d[0::2], d[1::2]]
 
         if Receiver.isSimulation:
@@ -112,8 +116,8 @@ class MLE(object):
                                                    Receiver.decimal_num)
 
         for i in range(1, len(self._receivers)):
-            of_solutions[0] += (d[0][i] - d[0][0] - self.receivers[i].tDoA * Receiver.c) ** 2
-            of_solutions[1] += (d[1][i] - d[1][0] - self.receivers[i].tDoA * Receiver.c) ** 2
+            of_solutions[0] += (d[0][i] - d[0][0] - unp.nominal_values(self.receivers[i].tDoA) * Receiver.c) ** 2
+            of_solutions[1] += (d[1][i] - d[1][0] - unp.nominal_values(self.receivers[i].tDoA) * Receiver.c) ** 2
 
         self._estimatedPositions = src_positions
         self._chosenRootIdx = np.argmin(of_solutions)
@@ -123,13 +127,15 @@ class MLE(object):
             if user_cond_met[0] and not user_cond_met[1]:
                 self._chosenRootIdx = np.argwhere(user_cond_met)
 
-        return src_positions[int(self._chosenRootIdx)]
+        result = src_positions_err[int(self._chosenRootIdx)]
+        result = unp.uarray(np.around(unp.nominal_values(result), 2), np.around(unp.std_devs(result), 2))
+        return result
 
     def __calc_src(self, d: np.float64) -> np.ndarray:
         """Applies the matrix equation for source coordinates, assuming known d - distance between the reference
            receiver(usually 1) and the source"""
 
-        return np.matmul(self._posMatrix, (self._dist_matrix * d + self._k_dist_matrix))
+        return self._posMatrix * (self._dist_matrix * d + self._k_dist_matrix)
 
     def __mle_distance_equation(self, d: np.float64) -> np.float64:
         """Realizes 4-th equation for d - distance between the reference receiver and the source,
@@ -146,24 +152,28 @@ class MLE(object):
         """Performs all the calculations for the source position, returns best guess of the source location (x,y,z)"""
 
         # R matrix
-        self._k_dist_matrix = 0.5 * np.array([[rec.dist(self._refRec) ** 2 - rec.calc_k() + self._refRec_k]
-                                              for rec in self._receivers if rec != self._refRec], np.float64)
+        self._k_dist_matrix = 0.5 * np.matrix([[rec.dist(self._refRec) ** 2 - rec.calc_k() + self._refRec_k]
+                                                for rec in self._receivers if rec != self._refRec], object)
 
         # V matrix
         self._dist_matrix = np.array([[rec.dist(self._refRec)] for rec in self._receivers if rec != self._refRec],
-                                     np.float64)
+                                     object)
+
+        self._k_dist_matrix = unp.umatrix(unp.nominal_values(self._k_dist_matrix), unp.std_devs(self._k_dist_matrix))
+
+        self._dist_matrix = unp.umatrix(unp.nominal_values(self._dist_matrix), unp.std_devs(self._dist_matrix))
+
         if calc_mode == MLE.CalcMode.MLE_SOLVER:
             self._d_ref = fsolve(lambda d: self.__mle_distance_equation(d), np.array([-40, 40]))
         else:
-            n_mat = np.matmul(self._posMatrix, self._dist_matrix)
-            r_mat = np.matmul(self._posMatrix, self._k_dist_matrix)
-            a = np.matmul(np.transpose(n_mat), n_mat) - 1
-            b = 2 * (np.matmul(np.transpose(n_mat), r_mat) -
-                     np.transpose(n_mat) * np.transpose(np.matrix(self._refRec.position)))
-            c = -2 * np.matmul(np.matrix(self._refRec.position), r_mat) + \
-                np.matmul(np.transpose(r_mat), r_mat) + self._refRec_k
+            n_mat = self._posMatrix * self._dist_matrix
+            r_mat = self._posMatrix * self._k_dist_matrix
+            a = n_mat.transpose() * n_mat - 1
 
-            delta_sqr = np.sqrt(np.abs(b ** 2 - 4 * a * c))
+            b = 2 * (n_mat.transpose() * r_mat - n_mat.transpose() * self.ref_rec.position.transpose())
+            c = -2 * self.ref_rec.position * r_mat + r_mat.transpose() * r_mat + self._refRec_k
+
+            delta_sqr = umath.sqrt(abs((b ** 2 - 4 * a * c)[0,0]))
             self._d_ref = [(-b - delta_sqr) / (2 * a), (-b + delta_sqr) / (2 * a)]
 
         if self._mode == self.Mode.MLE_HLS:
