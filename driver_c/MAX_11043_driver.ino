@@ -2,48 +2,43 @@
 #include "registers.h"
 #include "hardware.h"
 #include <SPI.h>
-#include "roundBuffer.h"
-//IntervalTimer blinkTimer;
 
-uint8_t testBuff[2048 * 8];
-uint32_t buffSize = 0;
+IntervalTimer statusTimer;
 
-extern volatile roundBuff samples;
-extern volatile uint32_t counter;
+int counter = 0;
 
 void setup() {
   MAX11043_STATUS adcStatus = STATUS_OK;
   SPI.begin();
   Serial.begin(2000000);
-  spi_init(2,3,4);  
-  adcStatus = MAX11043_init(CHANNEL_A | CHANNEL_B | CHANNEL_D, BITS_16, 2048, CLK_DIV_1_TO_6);
+  spi_init(2,3,4);
+  adcStatus = MAX11043_init(CHANNEL_A | CHANNEL_B | CHANNEL_C | CHANNEL_D, 2048, CLK_DIV_1_TO_6);
   if(adcStatus != STATUS_OK){
     pinMode(13, OUTPUT);
     signalizeError(adcStatus);
   }
-  MAX11043_read_samples_cont();
+  statusTimer.begin(serialStatus, 500000);
 }
 
 void loop() {
-  uint32_t ctr = 0;
-  sample3_ch sample;
-  delay(20);
+  #define SAMPLE_SIZE 4 * sizeof(int16_t)
   
-  MAX11043_stop_interrupt();
-  ctr = counter;
-  counter = 0;
-  MAX11043_attach_interrupt();
-  buffSize = roundBuff_getMany(&samples, testBuff, ctr);
-  /*if(Serial.dtr()){
-    sample = ((sample3_ch*)testBuff)[5];
-    Serial.print(sample.ch1); Serial.print("|");
-    Serial.print(sample.ch2); Serial.print("|");
-    Serial.print(sample.ch3); Serial.print("\r\n");
-    //Serial.print(sample.ch4); Serial.print("\r\n");
-  }*/
-  if(Serial.dtr()){
-    Serial.write(testBuff,buffSize * samples.elementSize);
+  byte buff[SAMPLE_SIZE];
+  bool dataReady = false;
+  int16_t channelData = -1;
+  
+  if(digitalRead(3) == LOW && !dataReady){
+      spi_cs_low();
+      spi_read_back((char*)buff, SAMPLE_SIZE);
+      spi_cs_high();
+      dataReady = true;
   }
+
+  if(Serial.dtr() && dataReady){
+      channelData = buff[0] << 8 | buff[1];
+      Serial.write(buff, SAMPLE_SIZE);
+      dataReady = false;
+    }
 }
 
 void timeThis(void (*f)(void), const char* test_name, unsigned int times) {
@@ -78,7 +73,7 @@ void signalizeError(MAX11043_STATUS errorCode){
     Serial.print(errorCode);
     Serial.print("\r\n");
     blinkDiode();
-    delay(500);
+    delay(2000);
   }  
 }
 
@@ -90,4 +85,18 @@ void blinkDiode(){
     digitalWrite(13, HIGH);
   diodeState = !diodeState;
 }
+
+void serialStatus(){
+  static bool isConverting = false;
+  bool serialStatus = !Serial.rts() && Serial.dtr();
+  
+  if(serialStatus && !isConverting){
+      MAX11043_read_samples_cont();
+      isConverting = true;
+  }
+  else if(!serialStatus && isConverting){
+      MAX11043_stop_reading_samples();
+      isConverting = false;
+  }  
+ }
 

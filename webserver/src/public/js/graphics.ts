@@ -274,7 +274,7 @@ const app = new WHS.App([
     }),
     new WHS.SceneModule(),
     new WHS.DefineModule('camera', new WHS.PerspectiveCamera({
-        position: new THREE.Vector3(21, 21, 0.5)
+        position: new THREE.Vector3(61, 41, 0.5)
     })),
     new WHS.RenderingModule({
         bgColor: 0x162129,

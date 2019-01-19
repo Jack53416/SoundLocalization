@@ -106,3 +106,12 @@ i{
     height:100%;
     padding:0;
 }
+
+.scoreboard {
+    border:1px solid rgba(0,0,0,.125);
+    background-color:#fff;
+    background-color:rgba(0,0,0,0.05);
+    border-radius:.25rem;
+    margin-bottom:2px;
+}
+
