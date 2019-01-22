@@ -90,7 +90,7 @@ class SensorMatrix(object):
                                      for rec in receiver_coords]
         debug_buff_size = 120 * data_chunk
         self._sound_detector = SoundDetector(0.9993, debug_buff_size)
-        self._mle_calc = MLE(receivers, src_conditions=lambda src: 0 <= src[2] < 3.0, reference_rec_id=reference_rec_id)
+        self._mle_calc = MLE(receivers, src_conditions=lambda src: 0 <= src[2] < 2.0, reference_rec_id=reference_rec_id)
         self._data_chunk = 4096
         self._dft = DFT(512, sampling_freq)
         self._rec_dft_buff = np.array([])

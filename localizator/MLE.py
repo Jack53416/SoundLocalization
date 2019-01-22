@@ -1,15 +1,14 @@
-from typing import List, Tuple, Callable
 from enum import Enum
+from typing import List, Callable, NamedTuple
 
+import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib import gridspec
+# noinspection PyUnresolvedReferences
+from mpl_toolkits.mplot3d import Axes3D
 from scipy.optimize import fsolve
 
 from localizator.receiver import Receiver
-
-import numpy as np
-import matplotlib.pyplot as plt
-# noinspection PyUnresolvedReferences
-from mpl_toolkits.mplot3d import Axes3D
 
 
 class MLE(object):
@@ -86,7 +85,7 @@ class MLE(object):
                                   x4 - x1, y4 - y1, z4 - z1]
            K = xi^2 + yi^2 + zi^2"""
 
-        self._posMatrix = np.array([rec.position - self._refRec.position
+        self._posMatrix = np.matrix([rec.position - self._refRec.position
                                     for rec in self._receivers if rec != self._refRec], np.float64)
         try:
             self._posMatrix = -np.linalg.inv(self._posMatrix)
@@ -101,7 +100,7 @@ class MLE(object):
            lowest OF value is returned"""
 
         src_positions = [self.__calc_src(D).flatten() for D in self._d_ref]
-        src_positions = np.around(src_positions, 2)
+        #src_positions = np.around(src_positions, 2)
         of_solutions = np.array([0.0, 0.0], np.float64)
         d = [np.linalg.norm(rec.position - src_pos) for rec in self._receivers for src_pos in src_positions]
         d = [d[0::2], d[1::2]]
@@ -192,23 +191,36 @@ class PerformanceTest(object):
        Additionally computation mode can be chosen: either using iterative solver, or by solving quadratic equation
        manually"""
 
-    def __init__(self, x_range: float = 20, y_range: float = 20, z_range: float = 20, delta: float = 0.1,
-                 all_roots: bool = False, mle_mode: MLE.Mode = MLE.Mode.MLE_HLS,
+    class Range(NamedTuple):
+        start: float
+        stop: float
+        step: float
+
+        def expand_to_pts(self, precision: int = -1) -> np.ndarray:
+            num: int = int(abs(self.stop - self.start) // self.step + 1)
+
+            pts = np.linspace(self.start, self.stop, num)
+            if precision > 0:
+                pts = np.around(pts, precision)
+            return pts
+
+    def __init__(self,
+                 rec_positions: np.ndarray,
+                 x_range: Range = (-10, 10, 1.0),
+                 y_range: Range = (-10, 10, 1.0),
+                 z_range: Range = (-10, 10, 1.0),
+                 spacing_precision=-1,
+                 all_roots: bool = False,
+                 mle_mode: MLE.Mode = MLE.Mode.MLE_HLS,
                  mle_calc_mode: MLE.CalcMode = MLE.CalcMode.MLE_COMPUTATION):
 
-        self.delta = delta
         self.xRange, self.yRange, self.zRange = x_range, y_range, z_range
+        self.spacing_precision = spacing_precision
 
-        receivers = [
-            Receiver(np.float64(-1.5), np.float64(-1.5), np.float64(-1.5)),
-            Receiver(np.float64(-1.5), np.float64(1.5), np.float64(1.5)),
-            Receiver(np.float64(1.5), np.float64(1.5), np.float64(-1.5)),
-            Receiver(np.float64(1.5), np.float64(-1.5), np.float64(-1.5))
-        ]
+        receivers = [Receiver(*rec_pos) for rec_pos in rec_positions]
+
         self.localizer = MLE(receivers, mode=mle_mode)
         self.mle_calc_mode = mle_calc_mode
-
-        self.xStart, self.yStart, self.zStart = -x_range / 2, -y_range / 2, -z_range / 2
 
         self.gAccuracy = []  # err <= 0.05
         self.mAccuracy = []  # err <= 0.2
@@ -222,12 +234,12 @@ class PerformanceTest(object):
     def execute(self) -> None:
         """Performs the actual simulation in the cuboid"""
 
-        for xPos in np.around(np.arange(self.xStart, self.xStart + self.xRange + self.delta, self.delta), 2):
+        for xPos in self.xRange.expand_to_pts(precision=self.spacing_precision):
             # change X pos
             print(xPos)
-            for yPos in np.around(np.arange(self.yStart, self.yStart + self.yRange + self.delta, self.delta), 2):
+            for yPos in self.yRange.expand_to_pts(precision=self.spacing_precision):
                 # change Y pos
-                for zPos in np.around(np.arange(self.zStart, self.zStart + self.zRange + self.delta, self.delta),2):
+                for zPos in self.zRange.expand_to_pts(precision=self.spacing_precision):
                     # change Z pos
                     self.setup_source_position(xPos, yPos, zPos)
                     pos = self.localizer.calculate(self.mle_calc_mode)
@@ -238,7 +250,8 @@ class PerformanceTest(object):
         """Places source in new location, specified by arguments, and simulates the sound propagation"""
 
         Receiver.set_source_position((x_pos, y_pos, z_pos))
-        for rec in self.localizer._receivers:
+
+        for rec in self.localizer.receivers:
             rec.receive()
 
     def asses_accuracy(self, calc_src_position: np.ndarray) -> None:
@@ -261,7 +274,7 @@ class PerformanceTest(object):
         else:
             self.bAccuracy.append(tuple(actual_pos))
 
-    def plot(self) -> None:
+    def plot(self, mark_receivers: bool = False) -> None:
         """Plots the obtained accuracy visually in 3d space in the cuboid, marking colors with respective accuracy
            tiers. File is saved on the hard drive - mle_performance.png"""
 
@@ -281,6 +294,10 @@ class PerformanceTest(object):
             ax0.scatter(p_accuracy[:, 0], p_accuracy[:, 1], p_accuracy[:, 2], c='orange', marker='o')
         if len(b_accuracy) > 0:
             ax0.scatter(b_accuracy[:, 0], b_accuracy[:, 1], b_accuracy[:, 2], c='r', marker='o')
+
+        if mark_receivers:
+            r_pos = np.matrix([rec.position for rec in self.localizer.receivers])
+            ax0.scatter(r_pos[:, 0], r_pos[:, 1], r_pos[:, 2], s=150, c='black', marker='v', alpha=0.99)
 
         ax0.set_xlabel('X[m]')
         ax0.set_ylabel('Y[m]')
@@ -308,7 +325,7 @@ class PerformanceTest(object):
         ax1.axis('equal')
 
         plt.tight_layout()
-        #plt.show()
+        plt.show()
         plt.savefig('mle_performance.png', transparent=True)
 
     def calc_stats(self) -> None:
@@ -335,7 +352,36 @@ def __test_mle():
 
 def __full_performance_test():
     Receiver.isSimulation = True
-    p = PerformanceTest(4, 4, 0, 0.1, all_roots=False, mle_mode=MLE.Mode.MLE_HLS,
+    uni_step = 0.12
+    t_width = 1.15
+    t_length = 1.18
+
+    x_range = PerformanceTest.Range(- 1.0, t_length + 1.0, uni_step)
+    y_range = PerformanceTest.Range(- 1.0, t_width + 1.0, uni_step)
+    z_range = PerformanceTest.Range(-0.02, 0.65, 0.65)
+
+    p_square = np.array([[0.0, 0.0, 0.72],
+                         [0.0, t_width, 1.0],
+                         [t_length, t_width, 0.72],
+                         [t_length, 0.0, 0.72]], np.float64)
+
+    p_piramid2 = np.array([[0.0, 0.0, 0.0],
+                          [0.0,        t_width,     0.0],
+                          [t_length,   t_width / 2, 0.0],
+                          [t_length/2, t_width,     1.0]], np.float64)
+
+    p_trapez = np.array( [[0.0,        0.0,       0.72],
+                          [0.0,        t_width,   0.72],
+                          [t_length/2,   t_width, 0.72],
+                          [t_length, 0.0,         1.0]], np.float64)
+
+    p = PerformanceTest(p_piramid2,
+                        x_range, y_range, z_range,
+                        spacing_precision=-1,
+                        all_roots=False,
+                        mle_mode=MLE.Mode.MLE_HLS,
                         mle_calc_mode=MLE.CalcMode.MLE_COMPUTATION)
     p.execute()
-    p.plot()
+    p.plot(mark_receivers=True)
+
+__full_performance_test()
