@@ -1,0 +1,4 @@
+Added Component: Designator=D4(LED-0805-A)
+Added Component: Designator=D5(LED-0805-A)
+Added Member To Class: ClassName=U_PowerSupply Member=Component D4 D Schottky
+Added Member To Class: ClassName=U_PowerSupply Member=Component D5 D Schottky

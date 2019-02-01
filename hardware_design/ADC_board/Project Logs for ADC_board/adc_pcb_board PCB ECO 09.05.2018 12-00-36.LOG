@@ -1,0 +1,13 @@
+Change Component Footprint: Designator=C10_UI1 Old Footprint=CAPC1005X55N New Footprint=CAPC1608X90N
+Change Component Footprint: Designator=C10_UI2 Old Footprint=CAPC1005X55N New Footprint=CAPC1608X90N
+Change Component Footprint: Designator=C10_UI3 Old Footprint=CAPC1005X55N New Footprint=CAPC1608X90N
+Change Component Footprint: Designator=C10_UI4 Old Footprint=CAPC1005X55N New Footprint=CAPC1608X90N
+Change Component Footprint: Designator=C12_UI1 Old Footprint=CAPC1005X55N New Footprint=CAPC1608X90N
+Change Component Footprint: Designator=C12_UI2 Old Footprint=CAPC1005X55N New Footprint=CAPC1608X90N
+Change Component Footprint: Designator=C12_UI3 Old Footprint=CAPC1005X55N New Footprint=CAPC1608X90N
+Change Component Footprint: Designator=C12_UI4 Old Footprint=CAPC1005X55N New Footprint=CAPC1608X90N
+Change Component Footprint: Designator=C11_UI1 Old Footprint=CAPC1608X90N New Footprint=CAPC2012X135N
+Change Component Footprint: Designator=C11_UI2 Old Footprint=CAPC1608X90N New Footprint=CAPC2012X135N
+Change Component Footprint: Designator=C11_UI3 Old Footprint=CAPC1608X90N New Footprint=CAPC2012X135N
+Change Component Footprint: Designator=C11_UI4 Old Footprint=CAPC1608X90N New Footprint=CAPC2012X135N
+Added Member To Class: ClassName=UI3 Member=Component C11_UI3 (C11) 47p

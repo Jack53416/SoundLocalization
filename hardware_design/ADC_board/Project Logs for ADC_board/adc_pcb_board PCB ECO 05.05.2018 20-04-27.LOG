@@ -1,0 +1,108 @@
+Removed Pin From Net: NetName=A_GND Pin=C1-2
+Removed Pin From Net: NetName=A5V Pin=C2-1
+Removed Pin From Net: NetName=A3V3 Pin=C5-1
+Removed Pin From Net: NetName=A_GND Pin=C5-2
+Removed Pin From Net: NetName=GND Pin=C8-2
+Removed Pin From Net: NetName=A_GND Pin=C9-2
+Removed Pin From Net: NetName=GND Pin=FB1-1
+Removed Pin From Net: NetName=A_GND Pin=FB1-2
+Removed Pin From Net: NetName=A_GND Pin=R4_U1-1
+Removed Pin From Net: NetName=A_GND Pin=R4_U2-1
+Removed Pin From Net: NetName=A_GND Pin=R4_U3-1
+Removed Pin From Net: NetName=A_GND Pin=R4_U4-1
+Removed Pin From Net: NetName=NetJ4_3 Pin=R8_U1-1
+Removed Pin From Net: NetName=NetJ3_3 Pin=R8_U2-1
+Removed Pin From Net: NetName=NetJ2_3 Pin=R8_U3-1
+Removed Pin From Net: NetName=NetJ1_3 Pin=R8_U4-1
+Removed Pin From Net: NetName=GND Pin=U1-2
+Removed Pin From Net: NetName=A3V3 Pin=U1-5
+Removed Pin From Net: NetName=GND Pin=U2-2
+Removed Pin From Net: NetName=A5V Pin=U2-5
+Removed Member From Class: ClassName=U_PowerSupply Member=C5
+Removed Member From Class: ClassName=U_PowerSupply Member=C8
+Removed Member From Class: ClassName=U_PowerSupply Member=C9
+Removed Member From Class: ClassName=U_PowerSupply Member=U1
+Removed Member From Class: ClassName=U_PowerSupply Member=U2
+Change Component DesignItemId : Designator=C2 Old DesignItemId=CAPC_1u_0805_X7R_16V_10% New DesignItemId=CAPC_100n_0805_X7R_50V_10%
+Change Component DesignItemId : Designator=C4 Old DesignItemId=CAPC_100n_0402_X5R_16V_10% New DesignItemId=CAPC_1u_0805_X7R_16V_10%
+Change Component DesignItemId : Designator=C1 Old DesignItemId=CAPC_100n_0402_X5R_16V_10% New DesignItemId=CAPC_100n_0805_X7R_50V_10%
+Change Component Footprint: Designator=C1 Old Footprint=CAPC1005X55N New Footprint=CAPC2012X135N
+Change Component Footprint: Designator=C4 Old Footprint=CAPC1005X55N New Footprint=CAPC2012X135N
+Change Component Comment : Designator=FB1 Old Comment=2K2 @ 100 MHz New Comment=220 at 100MHz
+Change Component Comment : Designator=C11_U1 Old Comment=39p New Comment=47p
+Change Component Comment : Designator=C11_U2 Old Comment=39p New Comment=47p
+Change Component Comment : Designator=C11_U3 Old Comment=39p New Comment=47p
+Change Component Comment : Designator=C11_U4 Old Comment=39p New Comment=47p
+Change Component Comment : Designator=C1 Old Comment=100n New Comment=approved sub OK
+Change Component Comment : Designator=C4 Old Comment=100n New Comment=approved sub OK
+Change Component Designator: OldDesignator=C10_U1 NewDesignator=C10_U_InputDriver1
+Change Component Designator: OldDesignator=C10_U2 NewDesignator=C10_U_InputDriver2
+Change Component Designator: OldDesignator=C10_U3 NewDesignator=C10_U_InputDriver3
+Change Component Designator: OldDesignator=C10_U4 NewDesignator=C10_U_InputDriver4
+Change Component Designator: OldDesignator=C11_U1 NewDesignator=C11_U_InputDriver1
+Change Component Designator: OldDesignator=C11_U2 NewDesignator=C11_U_InputDriver2
+Change Component Designator: OldDesignator=C11_U3 NewDesignator=C11_U_InputDriver3
+Change Component Designator: OldDesignator=C11_U4 NewDesignator=C11_U_InputDriver4
+Change Component Designator: OldDesignator=C12_U1 NewDesignator=C12_U_InputDriver1
+Change Component Designator: OldDesignator=C12_U2 NewDesignator=C12_U_InputDriver2
+Change Component Designator: OldDesignator=C12_U3 NewDesignator=C12_U_InputDriver3
+Change Component Designator: OldDesignator=C12_U4 NewDesignator=C12_U_InputDriver4
+Change Component Designator: OldDesignator=P? NewDesignator=P1
+Change Component Designator: OldDesignator=R4_U1 NewDesignator=R4_U_InputDriver1
+Change Component Designator: OldDesignator=R4_U2 NewDesignator=R4_U_InputDriver2
+Change Component Designator: OldDesignator=R4_U3 NewDesignator=R4_U_InputDriver3
+Change Component Designator: OldDesignator=R4_U4 NewDesignator=R4_U_InputDriver4
+Change Component Designator: OldDesignator=R5_U1 NewDesignator=R5_U_InputDriver1
+Change Component Designator: OldDesignator=R5_U2 NewDesignator=R5_U_InputDriver2
+Change Component Designator: OldDesignator=R5_U3 NewDesignator=R5_U_InputDriver3
+Change Component Designator: OldDesignator=R5_U4 NewDesignator=R5_U_InputDriver4
+Change Component Designator: OldDesignator=R6_U1 NewDesignator=R6_U_InputDriver1
+Change Component Designator: OldDesignator=R6_U2 NewDesignator=R6_U_InputDriver2
+Change Component Designator: OldDesignator=R6_U3 NewDesignator=R6_U_InputDriver3
+Change Component Designator: OldDesignator=R6_U4 NewDesignator=R6_U_InputDriver4
+Change Component Designator: OldDesignator=R7_U1 NewDesignator=R7_U_InputDriver1
+Change Component Designator: OldDesignator=R7_U2 NewDesignator=R7_U_InputDriver2
+Change Component Designator: OldDesignator=R7_U3 NewDesignator=R7_U_InputDriver3
+Change Component Designator: OldDesignator=R7_U4 NewDesignator=R7_U_InputDriver4
+Change Component Designator: OldDesignator=R8_U1 NewDesignator=R8_U_InputDriver1
+Change Component Designator: OldDesignator=R8_U2 NewDesignator=R8_U_InputDriver2
+Change Component Designator: OldDesignator=R8_U3 NewDesignator=R8_U_InputDriver3
+Change Component Designator: OldDesignator=R8_U4 NewDesignator=R8_U_InputDriver4
+Change Component Designator: OldDesignator=R9_U1 NewDesignator=R9_U_InputDriver1
+Change Component Designator: OldDesignator=R9_U2 NewDesignator=R9_U_InputDriver2
+Change Component Designator: OldDesignator=R9_U3 NewDesignator=R9_U_InputDriver3
+Change Component Designator: OldDesignator=R9_U4 NewDesignator=R9_U_InputDriver4
+Change Component Designator: OldDesignator=U4_U1 NewDesignator=U4_U_InputDriver1
+Change Component Designator: OldDesignator=U4_U2 NewDesignator=U4_U_InputDriver2
+Change Component Designator: OldDesignator=U4_U3 NewDesignator=U4_U_InputDriver3
+Change Component Designator: OldDesignator=U4_U4 NewDesignator=U4_U_InputDriver4
+Change Component Description : Designator=C2 Old Description=Capacitor SMD Cer 1uF 10% 16V X7R 0805 New Description=Capacitor SMD Cer 100nF 10% 50V X7R 0805
+Change Component Description : Designator=FB1 Old Description=Ferrite bead 2.2K Ohm at 100 MHz 200mA 0805 SMD New Description=Ferrite bead BLM21PG221SN1D 220 ohm at 100MHz 2A
+Added Component: Designator=FB2(FBC2012N)
+Added Pin To Net: NetName=GND Pin=C1-2
+Added Pin To Net: NetName=A3V3 Pin=C2-1
+Added Pin To Net: NetName=A5V Pin=C3-1
+Added Pin To Net: NetName=A5V Pin=C6-1
+Added Pin To Net: NetName=D3V3 Pin=FB1-1
+Added Pin To Net: NetName=A3V3 Pin=FB1-2
+Added Pin To Net: NetName=GND Pin=FB2-1
+Added Pin To Net: NetName=A_GND Pin=FB2-2
+Added Pin To Net: NetName=A5V Pin=P1-2
+Added Pin To Net: NetName=A5V Pin=P1-4
+Added Pin To Net: NetName=NetJ4_3 Pin=R4_U_InputDriver1-1
+Added Pin To Net: NetName=NetJ3_3 Pin=R4_U_InputDriver2-1
+Added Pin To Net: NetName=NetJ2_3 Pin=R4_U_InputDriver3-1
+Added Pin To Net: NetName=NetJ1_3 Pin=R4_U_InputDriver4-1
+Added Pin To Net: NetName=A_GND Pin=R8_U_InputDriver1-1
+Added Pin To Net: NetName=A_GND Pin=R8_U_InputDriver2-1
+Added Pin To Net: NetName=A_GND Pin=R8_U_InputDriver3-1
+Added Pin To Net: NetName=A_GND Pin=R8_U_InputDriver4-1
+Added Pin To Net: NetName=A5V Pin=U3-3
+Added Member To Class: ClassName=U_PowerSupply Member=Component FB2 220 at 100MHz
+Added Room: Name=TopLevel
+Added Room: Name=U_ADC_connections
+Added Room: Name=U_InputDriver1
+Added Room: Name=U_InputDriver2
+Added Room: Name=U_InputDriver3
+Added Room: Name=U_InputDriver4
+Added Room: Name=U_PowerSupply

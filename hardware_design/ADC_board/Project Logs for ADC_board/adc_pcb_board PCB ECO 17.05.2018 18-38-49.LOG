@@ -1,0 +1,4 @@
+Change Component Footprint: Designator=Y1 Old Footprint=Epson MA-505 crystal New Footprint=R38
+Added Member To Class: ClassName=UI3 Member=Component C11_UI3 (C11) 47p
+Added Member To Class: ClassName=U_ADC_connections Member=Component C19 approved sub OK
+Added Member To Class: ClassName=U_ADC_connections Member=Component C20 approved sub OK

@@ -1,0 +1,12 @@
+Change Net Name : Old Net Name=NetR5_UI1_2 New Net Name=AMP_UI1_P
+Change Net Name : Old Net Name=NetR5_UI2_2 New Net Name=AMP_UI2_P
+Change Net Name : Old Net Name=NetR5_UI3_2 New Net Name=AMP_UI3_P
+Change Net Name : Old Net Name=NetR5_UI4_2 New Net Name=AMP_UI4_P
+Change Net Name : Old Net Name=NetR7_UI1_1 New Net Name=AMP_UI1_N
+Change Net Name : Old Net Name=NetR7_UI2_1 New Net Name=AMP_UI2_N
+Change Net Name : Old Net Name=NetR7_UI3_1 New Net Name=AMP_UI3_N
+Change Net Name : Old Net Name=NetR7_UI4_1 New Net Name=AMP_UI4_N
+Added Differential Pair: Name=AMP_UI1
+Added Differential Pair: Name=AMP_UI2
+Added Differential Pair: Name=AMP_UI3
+Added Differential Pair: Name=AMP_UI4

@@ -1,0 +1,16 @@
+Removed Pin From Net: NetName=GND Pin=FB2-1
+Removed Pin From Net: NetName=A_GND Pin=FB2-2
+Removed Pin From Net: NetName=NetJ1_1 Pin=J1-1
+Removed Pin From Net: NetName=A_GND Pin=J1-5
+Removed Member From Class: ClassName=U_PowerSupply Member=FB2
+Change Component Footprint: Designator=J1 Old Footprint=JACK/6-V3 New Footprint=SJ1-352XN Female Jack
+Added Component: Designator=D4(SMB)
+Added Component: Designator=D5(SMB)
+Added Pin To Net: NetName=A_GND Pin=D4-1
+Added Pin To Net: NetName=GND Pin=D4-2
+Added Pin To Net: NetName=GND Pin=D5-1
+Added Pin To Net: NetName=A_GND Pin=D5-2
+Added Pin To Net: NetName=A_GND Pin=J1-1
+Added Pin To Net: NetName=NetJ1_1 Pin=J1-2
+Added Member To Class: ClassName=U_PowerSupply Member=Component D4 D Schottky
+Added Member To Class: ClassName=U_PowerSupply Member=Component D5 D Schottky

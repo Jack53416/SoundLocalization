@@ -1,0 +1,365 @@
+Added Component: Designator=C10_U_InputDriver1(CAPC1005X55N)
+Added Component: Designator=C10_U_InputDriver2(CAPC1005X55N)
+Added Component: Designator=C10_U_InputDriver3(CAPC1005X55N)
+Added Component: Designator=C10_U_InputDriver4(CAPC1005X55N)
+Added Component: Designator=C11_U_InputDriver1(CAPC1608X90N)
+Added Component: Designator=C11_U_InputDriver2(CAPC1608X90N)
+Added Component: Designator=C11_U_InputDriver3(CAPC1608X90N)
+Added Component: Designator=C11_U_InputDriver4(CAPC1608X90N)
+Added Component: Designator=C12_U_InputDriver1(CAPC1005X55N)
+Added Component: Designator=C12_U_InputDriver2(CAPC1005X55N)
+Added Component: Designator=C12_U_InputDriver3(CAPC1005X55N)
+Added Component: Designator=C12_U_InputDriver4(CAPC1005X55N)
+Added Component: Designator=C13(CAPC2012X135N)
+Added Component: Designator=C14(CAPC2012X135N)
+Added Component: Designator=C15(CAPC2012X135N)
+Added Component: Designator=C16(CAPC2012X135N)
+Added Component: Designator=C17(CAPC2012X135N)
+Added Component: Designator=C18(CAPC2012X135N)
+Added Component: Designator=C19(CAPC2012X135N)
+Added Component: Designator=C20(CAPC2012X135N)
+Added Component: Designator=C21(CAPC2012X135N)
+Added Component: Designator=C22(CAPC2012X135N)
+Added Component: Designator=C23(CAPC2012X135N)
+Added Component: Designator=C24(CAPC2012X135N)
+Added Component: Designator=C25(CAPC2012X135N)
+Added Component: Designator=C26(CAPC2012X135N)
+Added Component: Designator=C27(CAPC2012X135N)
+Added Component: Designator=C28(CAPC2012X135N)
+Added Component: Designator=C29(CAPC2012X135N)
+Added Component: Designator=C30(CAPC2012X135N)
+Added Component: Designator=C31(CAPC2012X135N)
+Added Component: Designator=C32(CAPC2012X135N)
+Added Component: Designator=C33(CAPC2012X135N)
+Added Component: Designator=J1(JACK/6-V3)
+Added Component: Designator=J2(JACK/6-V3)
+Added Component: Designator=J3(JACK/6-V3)
+Added Component: Designator=J4(JACK/6-V3)
+Added Component: Designator=P1(HDR2X20H)
+Added Component: Designator=R4_U_InputDriver1(RESC2012X70N)
+Added Component: Designator=R4_U_InputDriver2(RESC2012X70N)
+Added Component: Designator=R4_U_InputDriver3(RESC2012X70N)
+Added Component: Designator=R4_U_InputDriver4(RESC2012X70N)
+Added Component: Designator=R5_U_InputDriver1(RESC2012X70N)
+Added Component: Designator=R5_U_InputDriver2(RESC2012X70N)
+Added Component: Designator=R5_U_InputDriver3(RESC2012X70N)
+Added Component: Designator=R5_U_InputDriver4(RESC2012X70N)
+Added Component: Designator=R6_U_InputDriver1(RESC2012X70N)
+Added Component: Designator=R6_U_InputDriver2(RESC2012X70N)
+Added Component: Designator=R6_U_InputDriver3(RESC2012X70N)
+Added Component: Designator=R6_U_InputDriver4(RESC2012X70N)
+Added Component: Designator=R7_U_InputDriver1(RESC2012X70N)
+Added Component: Designator=R7_U_InputDriver2(RESC2012X70N)
+Added Component: Designator=R7_U_InputDriver3(RESC2012X70N)
+Added Component: Designator=R7_U_InputDriver4(RESC2012X70N)
+Added Component: Designator=R8_U_InputDriver1(RESC2012X70N)
+Added Component: Designator=R8_U_InputDriver2(RESC2012X70N)
+Added Component: Designator=R8_U_InputDriver3(RESC2012X70N)
+Added Component: Designator=R8_U_InputDriver4(RESC2012X70N)
+Added Component: Designator=R9_U_InputDriver1(RESC2012X70N)
+Added Component: Designator=R9_U_InputDriver2(RESC2012X70N)
+Added Component: Designator=R9_U_InputDriver3(RESC2012X70N)
+Added Component: Designator=R9_U_InputDriver4(RESC2012X70N)
+Added Component: Designator=R10(RESC2012X70N)
+Added Component: Designator=R11(RESC2012X70N)
+Added Component: Designator=R12(RESC2012X70N)
+Added Component: Designator=U4_U_InputDriver1(LT-MS8-8_N)
+Added Component: Designator=U4_U_InputDriver2(LT-MS8-8_N)
+Added Component: Designator=U4_U_InputDriver3(LT-MS8-8_N)
+Added Component: Designator=U4_U_InputDriver4(LT-MS8-8_N)
+Added Component: Designator=U5(21-0141I_T4066-5)
+Added Pin To Net: NetName=A3V3 Pin=C10_U_InputDriver1-1
+Added Pin To Net: NetName=A3V3 Pin=C10_U_InputDriver2-1
+Added Pin To Net: NetName=A3V3 Pin=C10_U_InputDriver3-1
+Added Pin To Net: NetName=A3V3 Pin=C10_U_InputDriver4-1
+Added Pin To Net: NetName=A3V3 Pin=C15-1
+Added Pin To Net: NetName=A3V3 Pin=C16-1
+Added Pin To Net: NetName=A3V3 Pin=U4_U_InputDriver1-3
+Added Pin To Net: NetName=A3V3 Pin=U4_U_InputDriver1-7
+Added Pin To Net: NetName=A3V3 Pin=U4_U_InputDriver2-3
+Added Pin To Net: NetName=A3V3 Pin=U4_U_InputDriver2-7
+Added Pin To Net: NetName=A3V3 Pin=U4_U_InputDriver3-3
+Added Pin To Net: NetName=A3V3 Pin=U4_U_InputDriver3-7
+Added Pin To Net: NetName=A3V3 Pin=U4_U_InputDriver4-3
+Added Pin To Net: NetName=A3V3 Pin=U4_U_InputDriver4-7
+Added Net: Name=A3V3
+Added Pin To Net: NetName=A5V Pin=J1-1
+Added Pin To Net: NetName=A5V Pin=J2-1
+Added Pin To Net: NetName=A5V Pin=J3-1
+Added Pin To Net: NetName=A5V Pin=J4-1
+Added Net: Name=A5V
+Added Pin To Net: NetName=A_GND Pin=C10_U_InputDriver1-2
+Added Pin To Net: NetName=A_GND Pin=C10_U_InputDriver2-2
+Added Pin To Net: NetName=A_GND Pin=C10_U_InputDriver3-2
+Added Pin To Net: NetName=A_GND Pin=C10_U_InputDriver4-2
+Added Pin To Net: NetName=A_GND Pin=C12_U_InputDriver1-2
+Added Pin To Net: NetName=A_GND Pin=C12_U_InputDriver2-2
+Added Pin To Net: NetName=A_GND Pin=C12_U_InputDriver3-2
+Added Pin To Net: NetName=A_GND Pin=C12_U_InputDriver4-2
+Added Pin To Net: NetName=A_GND Pin=C25-2
+Added Pin To Net: NetName=A_GND Pin=C26-2
+Added Pin To Net: NetName=A_GND Pin=C27-2
+Added Pin To Net: NetName=A_GND Pin=C28-2
+Added Pin To Net: NetName=A_GND Pin=C30-2
+Added Pin To Net: NetName=A_GND Pin=C31-2
+Added Pin To Net: NetName=A_GND Pin=C32-2
+Added Pin To Net: NetName=A_GND Pin=C33-2
+Added Pin To Net: NetName=A_GND Pin=J1-5
+Added Pin To Net: NetName=A_GND Pin=R4_U_InputDriver1-1
+Added Pin To Net: NetName=A_GND Pin=R4_U_InputDriver2-1
+Added Pin To Net: NetName=A_GND Pin=R4_U_InputDriver3-1
+Added Pin To Net: NetName=A_GND Pin=R4_U_InputDriver4-1
+Added Pin To Net: NetName=A_GND Pin=U4_U_InputDriver1-6
+Added Pin To Net: NetName=A_GND Pin=U4_U_InputDriver2-6
+Added Pin To Net: NetName=A_GND Pin=U4_U_InputDriver3-6
+Added Pin To Net: NetName=A_GND Pin=U4_U_InputDriver4-6
+Added Pin To Net: NetName=A_GND Pin=U5-6
+Added Pin To Net: NetName=A_GND Pin=U5-24
+Added Pin To Net: NetName=A_GND Pin=U5-33
+Added Pin To Net: NetName=A_GND Pin=U5-41
+Added Net: Name=A_GND
+Added Pin To Net: NetName=ADC_IN_U_InputDriver1_N Pin=C11_U_InputDriver1-2
+Added Pin To Net: NetName=ADC_IN_U_InputDriver1_N Pin=C24-2
+Added Pin To Net: NetName=ADC_IN_U_InputDriver1_N Pin=R7_U_InputDriver1-2
+Added Net: Name=ADC_IN_U_InputDriver1_N
+Added Pin To Net: NetName=ADC_IN_U_InputDriver1_P Pin=C11_U_InputDriver1-1
+Added Pin To Net: NetName=ADC_IN_U_InputDriver1_P Pin=C23-2
+Added Pin To Net: NetName=ADC_IN_U_InputDriver1_P Pin=R6_U_InputDriver1-2
+Added Net: Name=ADC_IN_U_InputDriver1_P
+Added Pin To Net: NetName=ADC_IN_U_InputDriver2_N Pin=C11_U_InputDriver2-2
+Added Pin To Net: NetName=ADC_IN_U_InputDriver2_N Pin=C22-2
+Added Pin To Net: NetName=ADC_IN_U_InputDriver2_N Pin=R7_U_InputDriver2-2
+Added Net: Name=ADC_IN_U_InputDriver2_N
+Added Pin To Net: NetName=ADC_IN_U_InputDriver2_P Pin=C11_U_InputDriver2-1
+Added Pin To Net: NetName=ADC_IN_U_InputDriver2_P Pin=C21-2
+Added Pin To Net: NetName=ADC_IN_U_InputDriver2_P Pin=R6_U_InputDriver2-2
+Added Net: Name=ADC_IN_U_InputDriver2_P
+Added Pin To Net: NetName=ADC_IN_U_InputDriver3_N Pin=C11_U_InputDriver3-2
+Added Pin To Net: NetName=ADC_IN_U_InputDriver3_N Pin=C20-1
+Added Pin To Net: NetName=ADC_IN_U_InputDriver3_N Pin=R7_U_InputDriver3-2
+Added Net: Name=ADC_IN_U_InputDriver3_N
+Added Pin To Net: NetName=ADC_IN_U_InputDriver3_P Pin=C11_U_InputDriver3-1
+Added Pin To Net: NetName=ADC_IN_U_InputDriver3_P Pin=C19-2
+Added Pin To Net: NetName=ADC_IN_U_InputDriver3_P Pin=R6_U_InputDriver3-2
+Added Net: Name=ADC_IN_U_InputDriver3_P
+Added Pin To Net: NetName=ADC_IN_U_InputDriver4_N Pin=C11_U_InputDriver4-2
+Added Pin To Net: NetName=ADC_IN_U_InputDriver4_N Pin=C18-1
+Added Pin To Net: NetName=ADC_IN_U_InputDriver4_N Pin=R7_U_InputDriver4-2
+Added Net: Name=ADC_IN_U_InputDriver4_N
+Added Pin To Net: NetName=ADC_IN_U_InputDriver4_P Pin=C11_U_InputDriver4-1
+Added Pin To Net: NetName=ADC_IN_U_InputDriver4_P Pin=C17-1
+Added Pin To Net: NetName=ADC_IN_U_InputDriver4_P Pin=R6_U_InputDriver4-2
+Added Net: Name=ADC_IN_U_InputDriver4_P
+Added Pin To Net: NetName=CONVRUN Pin=P1-35
+Added Pin To Net: NetName=CONVRUN Pin=R12-1
+Added Pin To Net: NetName=CONVRUN Pin=U5-12
+Added Net: Name=CONVRUN
+Added Pin To Net: NetName=CS Pin=P1-31
+Added Pin To Net: NetName=CS Pin=R10-2
+Added Pin To Net: NetName=CS Pin=U5-13
+Added Net: Name=CS
+Added Pin To Net: NetName=D3V3 Pin=C13-1
+Added Pin To Net: NetName=D3V3 Pin=C14-1
+Added Pin To Net: NetName=D3V3 Pin=R10-1
+Added Pin To Net: NetName=D3V3 Pin=R11-1
+Added Net: Name=D3V3
+Added Pin To Net: NetName=DATA_READY Pin=P1-33
+Added Pin To Net: NetName=DATA_READY Pin=R11-2
+Added Pin To Net: NetName=DATA_READY Pin=U5-18
+Added Net: Name=DATA_READY
+Added Pin To Net: NetName=GND Pin=C29-1
+Added Pin To Net: NetName=GND Pin=P1-6
+Added Pin To Net: NetName=GND Pin=P1-9
+Added Pin To Net: NetName=GND Pin=P1-14
+Added Pin To Net: NetName=GND Pin=P1-20
+Added Pin To Net: NetName=GND Pin=P1-25
+Added Pin To Net: NetName=GND Pin=P1-30
+Added Pin To Net: NetName=GND Pin=P1-34
+Added Pin To Net: NetName=GND Pin=P1-39
+Added Pin To Net: NetName=GND Pin=R12-2
+Added Pin To Net: NetName=GND Pin=U5-7
+Added Pin To Net: NetName=GND Pin=U5-17
+Added Pin To Net: NetName=GND Pin=U5-21
+Added Pin To Net: NetName=GND Pin=U5-23
+Added Pin To Net: NetName=GND Pin=U5-35
+Added Net: Name=GND
+Added Pin To Net: NetName=MISO Pin=P1-21
+Added Pin To Net: NetName=MISO Pin=U5-14
+Added Net: Name=MISO
+Added Pin To Net: NetName=MOSI Pin=P1-19
+Added Pin To Net: NetName=MOSI Pin=U5-15
+Added Net: Name=MOSI
+Added Pin To Net: NetName=NetC12_U_InputDriver1_1 Pin=C12_U_InputDriver1-1
+Added Pin To Net: NetName=NetC12_U_InputDriver1_1 Pin=U4_U_InputDriver1-2
+Added Net: Name=NetC12_U_InputDriver1_1
+Added Pin To Net: NetName=NetC12_U_InputDriver2_1 Pin=C12_U_InputDriver2-1
+Added Pin To Net: NetName=NetC12_U_InputDriver2_1 Pin=U4_U_InputDriver2-2
+Added Net: Name=NetC12_U_InputDriver2_1
+Added Pin To Net: NetName=NetC12_U_InputDriver3_1 Pin=C12_U_InputDriver3-1
+Added Pin To Net: NetName=NetC12_U_InputDriver3_1 Pin=U4_U_InputDriver3-2
+Added Net: Name=NetC12_U_InputDriver3_1
+Added Pin To Net: NetName=NetC12_U_InputDriver4_1 Pin=C12_U_InputDriver4-1
+Added Pin To Net: NetName=NetC12_U_InputDriver4_1 Pin=U4_U_InputDriver4-2
+Added Net: Name=NetC12_U_InputDriver4_1
+Added Pin To Net: NetName=NetC13_2 Pin=C13-2
+Added Pin To Net: NetName=NetC13_2 Pin=U5-22
+Added Net: Name=NetC13_2
+Added Pin To Net: NetName=NetC14_2 Pin=C14-2
+Added Pin To Net: NetName=NetC14_2 Pin=U5-8
+Added Net: Name=NetC14_2
+Added Pin To Net: NetName=NetC15_2 Pin=C15-2
+Added Pin To Net: NetName=NetC15_2 Pin=U5-5
+Added Net: Name=NetC15_2
+Added Pin To Net: NetName=NetC16_2 Pin=C16-2
+Added Pin To Net: NetName=NetC16_2 Pin=U5-26
+Added Net: Name=NetC16_2
+Added Pin To Net: NetName=NetC17_2 Pin=C17-2
+Added Pin To Net: NetName=NetC17_2 Pin=U5-4
+Added Net: Name=NetC17_2
+Added Pin To Net: NetName=NetC18_2 Pin=C18-2
+Added Pin To Net: NetName=NetC18_2 Pin=U5-3
+Added Net: Name=NetC18_2
+Added Pin To Net: NetName=NetC19_1 Pin=C19-1
+Added Pin To Net: NetName=NetC19_1 Pin=U5-40
+Added Net: Name=NetC19_1
+Added Pin To Net: NetName=NetC20_2 Pin=C20-2
+Added Pin To Net: NetName=NetC20_2 Pin=U5-1
+Added Net: Name=NetC20_2
+Added Pin To Net: NetName=NetC21_1 Pin=C21-1
+Added Pin To Net: NetName=NetC21_1 Pin=U5-37
+Added Net: Name=NetC21_1
+Added Pin To Net: NetName=NetC22_1 Pin=C22-1
+Added Pin To Net: NetName=NetC22_1 Pin=U5-36
+Added Net: Name=NetC22_1
+Added Pin To Net: NetName=NetC23_1 Pin=C23-1
+Added Pin To Net: NetName=NetC23_1 Pin=U5-32
+Added Net: Name=NetC23_1
+Added Pin To Net: NetName=NetC24_1 Pin=C24-1
+Added Pin To Net: NetName=NetC24_1 Pin=U5-31
+Added Net: Name=NetC24_1
+Added Pin To Net: NetName=NetC25_1 Pin=C25-1
+Added Pin To Net: NetName=NetC25_1 Pin=U5-30
+Added Net: Name=NetC25_1
+Added Pin To Net: NetName=NetC26_1 Pin=C26-1
+Added Pin To Net: NetName=NetC26_1 Pin=U5-38
+Added Net: Name=NetC26_1
+Added Pin To Net: NetName=NetC27_1 Pin=C27-1
+Added Pin To Net: NetName=NetC27_1 Pin=U5-39
+Added Net: Name=NetC27_1
+Added Pin To Net: NetName=NetC28_1 Pin=C28-1
+Added Pin To Net: NetName=NetC28_1 Pin=U5-2
+Added Net: Name=NetC28_1
+Added Pin To Net: NetName=NetC29_2 Pin=C29-2
+Added Pin To Net: NetName=NetC29_2 Pin=U5-9
+Added Net: Name=NetC29_2
+Added Pin To Net: NetName=NetC30_1 Pin=C30-1
+Added Pin To Net: NetName=NetC30_1 Pin=U5-34
+Added Net: Name=NetC30_1
+Added Pin To Net: NetName=NetC31_1 Pin=C31-1
+Added Pin To Net: NetName=NetC31_1 Pin=U5-29
+Added Net: Name=NetC31_1
+Added Pin To Net: NetName=NetC32_1 Pin=C32-1
+Added Pin To Net: NetName=NetC32_1 Pin=U5-28
+Added Net: Name=NetC32_1
+Added Pin To Net: NetName=NetC33_1 Pin=C33-1
+Added Pin To Net: NetName=NetC33_1 Pin=U5-27
+Added Net: Name=NetC33_1
+Added Pin To Net: NetName=NetJ1_3 Pin=J1-3
+Added Pin To Net: NetName=NetJ1_3 Pin=R8_U_InputDriver4-1
+Added Net: Name=NetJ1_3
+Added Pin To Net: NetName=NetJ2_3 Pin=J2-3
+Added Pin To Net: NetName=NetJ2_3 Pin=R8_U_InputDriver3-1
+Added Net: Name=NetJ2_3
+Added Pin To Net: NetName=NetJ3_3 Pin=J3-3
+Added Pin To Net: NetName=NetJ3_3 Pin=R8_U_InputDriver2-1
+Added Net: Name=NetJ3_3
+Added Pin To Net: NetName=NetJ4_3 Pin=J4-3
+Added Pin To Net: NetName=NetJ4_3 Pin=R8_U_InputDriver1-1
+Added Net: Name=NetJ4_3
+Added Pin To Net: NetName=NetR4_U_InputDriver1_2 Pin=R4_U_InputDriver1-2
+Added Pin To Net: NetName=NetR4_U_InputDriver1_2 Pin=R5_U_InputDriver1-1
+Added Pin To Net: NetName=NetR4_U_InputDriver1_2 Pin=U4_U_InputDriver1-1
+Added Net: Name=NetR4_U_InputDriver1_2
+Added Pin To Net: NetName=NetR4_U_InputDriver2_2 Pin=R4_U_InputDriver2-2
+Added Pin To Net: NetName=NetR4_U_InputDriver2_2 Pin=R5_U_InputDriver2-1
+Added Pin To Net: NetName=NetR4_U_InputDriver2_2 Pin=U4_U_InputDriver2-1
+Added Net: Name=NetR4_U_InputDriver2_2
+Added Pin To Net: NetName=NetR4_U_InputDriver3_2 Pin=R4_U_InputDriver3-2
+Added Pin To Net: NetName=NetR4_U_InputDriver3_2 Pin=R5_U_InputDriver3-1
+Added Pin To Net: NetName=NetR4_U_InputDriver3_2 Pin=U4_U_InputDriver3-1
+Added Net: Name=NetR4_U_InputDriver3_2
+Added Pin To Net: NetName=NetR4_U_InputDriver4_2 Pin=R4_U_InputDriver4-2
+Added Pin To Net: NetName=NetR4_U_InputDriver4_2 Pin=R5_U_InputDriver4-1
+Added Pin To Net: NetName=NetR4_U_InputDriver4_2 Pin=U4_U_InputDriver4-1
+Added Net: Name=NetR4_U_InputDriver4_2
+Added Pin To Net: NetName=NetR5_U_InputDriver1_2 Pin=R5_U_InputDriver1-2
+Added Pin To Net: NetName=NetR5_U_InputDriver1_2 Pin=R6_U_InputDriver1-1
+Added Pin To Net: NetName=NetR5_U_InputDriver1_2 Pin=U4_U_InputDriver1-4
+Added Net: Name=NetR5_U_InputDriver1_2
+Added Pin To Net: NetName=NetR5_U_InputDriver2_2 Pin=R5_U_InputDriver2-2
+Added Pin To Net: NetName=NetR5_U_InputDriver2_2 Pin=R6_U_InputDriver2-1
+Added Pin To Net: NetName=NetR5_U_InputDriver2_2 Pin=U4_U_InputDriver2-4
+Added Net: Name=NetR5_U_InputDriver2_2
+Added Pin To Net: NetName=NetR5_U_InputDriver3_2 Pin=R5_U_InputDriver3-2
+Added Pin To Net: NetName=NetR5_U_InputDriver3_2 Pin=R6_U_InputDriver3-1
+Added Pin To Net: NetName=NetR5_U_InputDriver3_2 Pin=U4_U_InputDriver3-4
+Added Net: Name=NetR5_U_InputDriver3_2
+Added Pin To Net: NetName=NetR5_U_InputDriver4_2 Pin=R5_U_InputDriver4-2
+Added Pin To Net: NetName=NetR5_U_InputDriver4_2 Pin=R6_U_InputDriver4-1
+Added Pin To Net: NetName=NetR5_U_InputDriver4_2 Pin=U4_U_InputDriver4-4
+Added Net: Name=NetR5_U_InputDriver4_2
+Added Pin To Net: NetName=NetR7_U_InputDriver1_1 Pin=R7_U_InputDriver1-1
+Added Pin To Net: NetName=NetR7_U_InputDriver1_1 Pin=R9_U_InputDriver1-2
+Added Pin To Net: NetName=NetR7_U_InputDriver1_1 Pin=U4_U_InputDriver1-5
+Added Net: Name=NetR7_U_InputDriver1_1
+Added Pin To Net: NetName=NetR7_U_InputDriver2_1 Pin=R7_U_InputDriver2-1
+Added Pin To Net: NetName=NetR7_U_InputDriver2_1 Pin=R9_U_InputDriver2-2
+Added Pin To Net: NetName=NetR7_U_InputDriver2_1 Pin=U4_U_InputDriver2-5
+Added Net: Name=NetR7_U_InputDriver2_1
+Added Pin To Net: NetName=NetR7_U_InputDriver3_1 Pin=R7_U_InputDriver3-1
+Added Pin To Net: NetName=NetR7_U_InputDriver3_1 Pin=R9_U_InputDriver3-2
+Added Pin To Net: NetName=NetR7_U_InputDriver3_1 Pin=U4_U_InputDriver3-5
+Added Net: Name=NetR7_U_InputDriver3_1
+Added Pin To Net: NetName=NetR7_U_InputDriver4_1 Pin=R7_U_InputDriver4-1
+Added Pin To Net: NetName=NetR7_U_InputDriver4_1 Pin=R9_U_InputDriver4-2
+Added Pin To Net: NetName=NetR7_U_InputDriver4_1 Pin=U4_U_InputDriver4-5
+Added Net: Name=NetR7_U_InputDriver4_1
+Added Pin To Net: NetName=NetR8_U_InputDriver1_2 Pin=R8_U_InputDriver1-2
+Added Pin To Net: NetName=NetR8_U_InputDriver1_2 Pin=R9_U_InputDriver1-1
+Added Pin To Net: NetName=NetR8_U_InputDriver1_2 Pin=U4_U_InputDriver1-8
+Added Net: Name=NetR8_U_InputDriver1_2
+Added Pin To Net: NetName=NetR8_U_InputDriver2_2 Pin=R8_U_InputDriver2-2
+Added Pin To Net: NetName=NetR8_U_InputDriver2_2 Pin=R9_U_InputDriver2-1
+Added Pin To Net: NetName=NetR8_U_InputDriver2_2 Pin=U4_U_InputDriver2-8
+Added Net: Name=NetR8_U_InputDriver2_2
+Added Pin To Net: NetName=NetR8_U_InputDriver3_2 Pin=R8_U_InputDriver3-2
+Added Pin To Net: NetName=NetR8_U_InputDriver3_2 Pin=R9_U_InputDriver3-1
+Added Pin To Net: NetName=NetR8_U_InputDriver3_2 Pin=U4_U_InputDriver3-8
+Added Net: Name=NetR8_U_InputDriver3_2
+Added Pin To Net: NetName=NetR8_U_InputDriver4_2 Pin=R8_U_InputDriver4-2
+Added Pin To Net: NetName=NetR8_U_InputDriver4_2 Pin=R9_U_InputDriver4-1
+Added Pin To Net: NetName=NetR8_U_InputDriver4_2 Pin=U4_U_InputDriver4-8
+Added Net: Name=NetR8_U_InputDriver4_2
+Added Pin To Net: NetName=SCLK Pin=P1-23
+Added Pin To Net: NetName=SCLK Pin=U5-16
+Added Net: Name=SCLK
+Added Pin To Net: NetName=VCC Pin=P1-2
+Added Pin To Net: NetName=VCC Pin=P1-4
+Added Net: Name=VCC
+Added Class: Name=TopLevel
+Added Class: Name=U_ADC_connections
+Added Class: Name=U_InputDriver1
+Added Class: Name=U_InputDriver2
+Added Class: Name=U_InputDriver3
+Added Class: Name=U_InputDriver4
+Added Differential Pair: Name=ADC_IN_U_InputDriver1
+Added Differential Pair: Name=ADC_IN_U_InputDriver2
+Added Differential Pair: Name=ADC_IN_U_InputDriver3
+Added Differential Pair: Name=ADC_IN_U_InputDriver4
+Added Class: Name=InputDriver
+Added Room: Name=TopLevel
+Added Room: Name=U_ADC_connections
+Added Room: Name=U_InputDriver1
+Added Room: Name=U_InputDriver2
+Added Room: Name=U_InputDriver3
+Added Room: Name=U_InputDriver4

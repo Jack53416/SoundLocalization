@@ -1,0 +1,12 @@
+Change Net Name : Old Net Name=NetC17_2 New Net Name=A_IN_P
+Change Net Name : Old Net Name=NetC18_2 New Net Name=A_IN_N
+Change Net Name : Old Net Name=NetC19_1 New Net Name=B_IN_P
+Change Net Name : Old Net Name=NetC20_2 New Net Name=B_IN_N
+Change Net Name : Old Net Name=NetC21_1 New Net Name=C_IN_P
+Change Net Name : Old Net Name=NetC22_1 New Net Name=C_IN_N
+Change Net Name : Old Net Name=NetC23_1 New Net Name=D_IN_P
+Change Net Name : Old Net Name=NetC24_1 New Net Name=D_IN_N
+Added Differential Pair: Name=A_IN
+Added Differential Pair: Name=B_IN
+Added Differential Pair: Name=C_IN
+Added Differential Pair: Name=D_IN

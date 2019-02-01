@@ -1,0 +1,4 @@
+Change Component DesignItemId : Designator=P1 Old DesignItemId=Header 4X2H New DesignItemId=Header 4X2
+Change Component Footprint: Designator=P1 Old Footprint=HDR2X4H New Footprint=HDR2X4
+Change Component Comment : Designator=P1 Old Comment=Header 4X2H New Comment=Header 4X2
+Added Room: Name=Mic_preamp_schematic

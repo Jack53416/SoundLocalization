@@ -1,0 +1,4 @@
+Removed Pin From Net: NetName=JACKSENSE2 Pin=P1-13
+Removed Pin From Net: NetName=JACKSENSE1 Pin=P1-15
+Added Pin To Net: NetName=JACKSENSE1 Pin=P1-13
+Added Pin To Net: NetName=JACKSENSE2 Pin=P1-15

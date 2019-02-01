@@ -1,0 +1,4 @@
+Added Component: Designator=Y1(Quartz Crystal HC-49USSX)
+Added Pin To Net: NetName=NetC5_1 Pin=Y1-1
+Added Pin To Net: NetName=NetC8_1 Pin=Y1-2
+Added Member To Class: ClassName=U_ADC_connections Member=Component Y1 XTAL

@@ -1,0 +1,13 @@
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [[No Variations]] of Project [Microphone_preamp.PrjPcb]
+   Generated File[Mic_PCB.GTL]
+   Generated File[Mic_PCB.RUL]
+   Generated File[Mic_PCB.EXTREP]
+   Generated File[Mic_PCB.REP]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 09:42:36 On 16.04.2018

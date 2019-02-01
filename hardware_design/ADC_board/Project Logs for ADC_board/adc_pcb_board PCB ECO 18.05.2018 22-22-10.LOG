@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=NetCB1_1 Pin=CB1-1
+Removed Pin From Net: NetName=A5V Pin=CB1-2
+Removed Member From Class: ClassName=TopLevel Member=CB1
+Added Component: Designator=W1(HDR1X2)
+Added Pin To Net: NetName=NetCB1_1 Pin=W1-1
+Added Pin To Net: NetName=A5V Pin=W1-2
+Change Net Name : Old Net Name=NetCB1_1 New Net Name=NetJ1_3
+Added Member To Class: ClassName=TopLevel Member=Component W1 Jumper

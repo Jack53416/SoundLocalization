@@ -1,0 +1,27 @@
+Removed Pin From Net: NetName=A5V Pin=J1-1
+Removed Pin From Net: NetName=NetJ1_3 Pin=J1-3
+Removed Pin From Net: NetName=A5V Pin=J2-1
+Removed Pin From Net: NetName=NetJ2_3 Pin=J2-3
+Removed Pin From Net: NetName=A5V Pin=J3-1
+Removed Pin From Net: NetName=NetJ3_3 Pin=J3-3
+Removed Pin From Net: NetName=A5V Pin=J4-1
+Removed Pin From Net: NetName=NetJ4_3 Pin=J4-3
+Added Pin To Net: NetName=NetJ1_3 Pin=J1-1
+Added Pin To Net: NetName=A5V Pin=J1-3
+Added Pin To Net: NetName=NetJ2_3 Pin=J2-1
+Added Pin To Net: NetName=A5V Pin=J2-3
+Added Pin To Net: NetName=A_GND Pin=J2-5
+Added Pin To Net: NetName=NetJ3_3 Pin=J3-1
+Added Pin To Net: NetName=A5V Pin=J3-3
+Added Pin To Net: NetName=A_GND Pin=J3-5
+Added Pin To Net: NetName=NetJ4_3 Pin=J4-1
+Added Pin To Net: NetName=A5V Pin=J4-3
+Added Pin To Net: NetName=A_GND Pin=J4-5
+Change Net Name : Old Net Name=NetJ1_3 New Net Name=NetJ1_1
+Change Net Name : Old Net Name=NetJ2_3 New Net Name=NetJ2_1
+Change Net Name : Old Net Name=NetJ3_3 New Net Name=NetJ3_1
+Change Net Name : Old Net Name=NetJ4_3 New Net Name=NetJ4_1
+Added Member To Class: ClassName=TopLevel Member=Component J1 Phonejack3
+Added Member To Class: ClassName=TopLevel Member=Component J2 Phonejack3
+Added Member To Class: ClassName=TopLevel Member=Component J3 Phonejack3
+Added Member To Class: ClassName=TopLevel Member=Component J4 Phonejack3

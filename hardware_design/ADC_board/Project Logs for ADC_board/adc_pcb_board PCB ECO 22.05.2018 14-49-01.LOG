@@ -1,0 +1,23 @@
+Removed Pin From Net: NetName=GND Pin=C9-2
+Added Component: Designator=D1(3.2X1.6X1.1)
+Added Component: Designator=D6(3.2X1.6X1.1)
+Added Component: Designator=R3(RESC2012X70N)
+Added Component: Designator=R25(RESC2012X70N)
+Added Pin To Net: NetName=GND Pin=D1-2
+Added Pin To Net: NetName=GND Pin=D6-2
+Added Pin To Net: NetName=GP_LED1 Pin=P1-16
+Added Pin To Net: NetName=GP_LED1 Pin=R3-1
+Added Net: Name=GP_LED1
+Added Pin To Net: NetName=GP_LED2 Pin=P1-18
+Added Pin To Net: NetName=GP_LED2 Pin=R25-1
+Added Net: Name=GP_LED2
+Added Pin To Net: NetName=NetD1_1 Pin=D1-1
+Added Pin To Net: NetName=NetD1_1 Pin=R3-2
+Added Net: Name=NetD1_1
+Added Pin To Net: NetName=NetD6_1 Pin=D6-1
+Added Pin To Net: NetName=NetD6_1 Pin=R25-2
+Added Net: Name=NetD6_1
+Added Member To Class: ClassName=TopLevel Member=Component D1 LED2
+Added Member To Class: ClassName=TopLevel Member=Component D6 LED2
+Added Member To Class: ClassName=TopLevel Member=Component R3 Thick Film
+Added Member To Class: ClassName=TopLevel Member=Component R25 Thick Film

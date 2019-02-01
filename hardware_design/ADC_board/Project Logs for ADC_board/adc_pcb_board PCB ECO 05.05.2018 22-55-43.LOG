@@ -1,0 +1,76 @@
+Change Component Designator: OldDesignator=C10_U_InputDriver1 NewDesignator=C10_UI1
+Change Component Designator: OldDesignator=C10_U_InputDriver2 NewDesignator=C10_UI2
+Change Component Designator: OldDesignator=C10_U_InputDriver3 NewDesignator=C10_UI3
+Change Component Designator: OldDesignator=C10_U_InputDriver4 NewDesignator=C10_UI4
+Change Component Designator: OldDesignator=C11_U_InputDriver1 NewDesignator=C11_UI1
+Change Component Designator: OldDesignator=C11_U_InputDriver2 NewDesignator=C11_UI2
+Change Component Designator: OldDesignator=C11_U_InputDriver3 NewDesignator=C11_UI3
+Change Component Designator: OldDesignator=C11_U_InputDriver4 NewDesignator=C11_UI4
+Change Component Designator: OldDesignator=C12_U_InputDriver1 NewDesignator=C12_UI1
+Change Component Designator: OldDesignator=C12_U_InputDriver2 NewDesignator=C12_UI2
+Change Component Designator: OldDesignator=C12_U_InputDriver3 NewDesignator=C12_UI3
+Change Component Designator: OldDesignator=C12_U_InputDriver4 NewDesignator=C12_UI4
+Change Component Designator: OldDesignator=R4_U_InputDriver1 NewDesignator=R4_UI1
+Change Component Designator: OldDesignator=R4_U_InputDriver2 NewDesignator=R4_UI2
+Change Component Designator: OldDesignator=R4_U_InputDriver3 NewDesignator=R4_UI3
+Change Component Designator: OldDesignator=R4_U_InputDriver4 NewDesignator=R4_UI4
+Change Component Designator: OldDesignator=R5_U_InputDriver1 NewDesignator=R5_UI1
+Change Component Designator: OldDesignator=R5_U_InputDriver2 NewDesignator=R5_UI2
+Change Component Designator: OldDesignator=R5_U_InputDriver3 NewDesignator=R5_UI3
+Change Component Designator: OldDesignator=R5_U_InputDriver4 NewDesignator=R5_UI4
+Change Component Designator: OldDesignator=R6_U_InputDriver1 NewDesignator=R6_UI1
+Change Component Designator: OldDesignator=R6_U_InputDriver2 NewDesignator=R6_UI2
+Change Component Designator: OldDesignator=R6_U_InputDriver3 NewDesignator=R6_UI3
+Change Component Designator: OldDesignator=R6_U_InputDriver4 NewDesignator=R6_UI4
+Change Component Designator: OldDesignator=R7_U_InputDriver1 NewDesignator=R7_UI1
+Change Component Designator: OldDesignator=R7_U_InputDriver2 NewDesignator=R7_UI2
+Change Component Designator: OldDesignator=R7_U_InputDriver3 NewDesignator=R7_UI3
+Change Component Designator: OldDesignator=R7_U_InputDriver4 NewDesignator=R7_UI4
+Change Component Designator: OldDesignator=R8_U_InputDriver1 NewDesignator=R8_UI1
+Change Component Designator: OldDesignator=R8_U_InputDriver2 NewDesignator=R8_UI2
+Change Component Designator: OldDesignator=R8_U_InputDriver3 NewDesignator=R8_UI3
+Change Component Designator: OldDesignator=R8_U_InputDriver4 NewDesignator=R8_UI4
+Change Component Designator: OldDesignator=R9_U_InputDriver1 NewDesignator=R9_UI1
+Change Component Designator: OldDesignator=R9_U_InputDriver2 NewDesignator=R9_UI2
+Change Component Designator: OldDesignator=R9_U_InputDriver3 NewDesignator=R9_UI3
+Change Component Designator: OldDesignator=R9_U_InputDriver4 NewDesignator=R9_UI4
+Change Component Designator: OldDesignator=U4_U_InputDriver1 NewDesignator=U4_UI1
+Change Component Designator: OldDesignator=U4_U_InputDriver2 NewDesignator=U4_UI2
+Change Component Designator: OldDesignator=U4_U_InputDriver3 NewDesignator=U4_UI3
+Change Component Designator: OldDesignator=U4_U_InputDriver4 NewDesignator=U4_UI4
+Change Net Name : Old Net Name=ADC_IN_U_InputDriver1_N New Net Name=ADC_IN_UI1_N
+Change Net Name : Old Net Name=ADC_IN_U_InputDriver1_P New Net Name=ADC_IN_UI1_P
+Change Net Name : Old Net Name=ADC_IN_U_InputDriver2_N New Net Name=ADC_IN_UI2_N
+Change Net Name : Old Net Name=ADC_IN_U_InputDriver2_P New Net Name=ADC_IN_UI2_P
+Change Net Name : Old Net Name=ADC_IN_U_InputDriver3_N New Net Name=ADC_IN_UI3_N
+Change Net Name : Old Net Name=ADC_IN_U_InputDriver3_P New Net Name=ADC_IN_UI3_P
+Change Net Name : Old Net Name=ADC_IN_U_InputDriver4_N New Net Name=ADC_IN_UI4_N
+Change Net Name : Old Net Name=ADC_IN_U_InputDriver4_P New Net Name=ADC_IN_UI4_P
+Change Net Name : Old Net Name=NetC12_U_InputDriver1_1 New Net Name=NetC12_UI1_1
+Change Net Name : Old Net Name=NetC12_U_InputDriver2_1 New Net Name=NetC12_UI2_1
+Change Net Name : Old Net Name=NetC12_U_InputDriver3_1 New Net Name=NetC12_UI3_1
+Change Net Name : Old Net Name=NetC12_U_InputDriver4_1 New Net Name=NetC12_UI4_1
+Change Net Name : Old Net Name=NetR4_U_InputDriver1_2 New Net Name=NetR4_UI1_2
+Change Net Name : Old Net Name=NetR4_U_InputDriver2_2 New Net Name=NetR4_UI2_2
+Change Net Name : Old Net Name=NetR4_U_InputDriver3_2 New Net Name=NetR4_UI3_2
+Change Net Name : Old Net Name=NetR4_U_InputDriver4_2 New Net Name=NetR4_UI4_2
+Change Net Name : Old Net Name=NetR5_U_InputDriver1_2 New Net Name=NetR5_UI1_2
+Change Net Name : Old Net Name=NetR5_U_InputDriver2_2 New Net Name=NetR5_UI2_2
+Change Net Name : Old Net Name=NetR5_U_InputDriver3_2 New Net Name=NetR5_UI3_2
+Change Net Name : Old Net Name=NetR5_U_InputDriver4_2 New Net Name=NetR5_UI4_2
+Change Net Name : Old Net Name=NetR7_U_InputDriver1_1 New Net Name=NetR7_UI1_1
+Change Net Name : Old Net Name=NetR7_U_InputDriver2_1 New Net Name=NetR7_UI2_1
+Change Net Name : Old Net Name=NetR7_U_InputDriver3_1 New Net Name=NetR7_UI3_1
+Change Net Name : Old Net Name=NetR7_U_InputDriver4_1 New Net Name=NetR7_UI4_1
+Change Net Name : Old Net Name=NetR8_U_InputDriver1_2 New Net Name=NetR8_UI1_2
+Change Net Name : Old Net Name=NetR8_U_InputDriver2_2 New Net Name=NetR8_UI2_2
+Change Net Name : Old Net Name=NetR8_U_InputDriver3_2 New Net Name=NetR8_UI3_2
+Change Net Name : Old Net Name=NetR8_U_InputDriver4_2 New Net Name=NetR8_UI4_2
+Change Class Name : Old Net Name=U_InputDriver1 New Net Name=UI1
+Change Class Name : Old Net Name=U_InputDriver2 New Net Name=UI2
+Change Class Name : Old Net Name=U_InputDriver3 New Net Name=UI3
+Change Class Name : Old Net Name=U_InputDriver4 New Net Name=UI4
+Added Differential Pair: Name=ADC_IN_UI1
+Added Differential Pair: Name=ADC_IN_UI2
+Added Differential Pair: Name=ADC_IN_UI3
+Added Differential Pair: Name=ADC_IN_UI4

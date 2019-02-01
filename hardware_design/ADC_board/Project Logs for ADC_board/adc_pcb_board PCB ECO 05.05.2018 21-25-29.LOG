@@ -1,0 +1,10 @@
+Removed Pin From Net: NetName=D3V3 Pin=C14-1
+Removed Pin From Net: NetName=A3V3 Pin=C15-1
+Removed Member From Class: ClassName=U_ADC_connections Member=C14
+Removed Member From Class: ClassName=U_ADC_connections Member=C15
+Added Pin To Net: NetName=GND Pin=C13-2
+Added Pin To Net: NetName=A_GND Pin=C16-2
+Added Pin To Net: NetName=A3V3 Pin=U5-5
+Added Pin To Net: NetName=D3V3 Pin=U5-8
+Added Pin To Net: NetName=D3V3 Pin=U5-22
+Added Pin To Net: NetName=A3V3 Pin=U5-26
