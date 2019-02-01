@@ -19,7 +19,7 @@ class Receiver(object):
     srcX: np.float64 = -10.0
     srcY: np.float64 = -10.0
     srcZ: np.float64 = -10.0
-    c: np.float64 = 340.0  # m/x
+    c: np.float64 = 343.0  # m/x
 
     decimal_num: int = 5
     isSimulation: bool = False

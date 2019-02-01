@@ -356,26 +356,26 @@ def __full_performance_test():
     t_width = 1.15
     t_length = 1.18
 
-    x_range = PerformanceTest.Range(- 1.0, t_length + 1.0, uni_step)
-    y_range = PerformanceTest.Range(- 1.0, t_width + 1.0, uni_step)
+    x_range = PerformanceTest.Range(-1.0, t_length + 1.0, uni_step)
+    y_range = PerformanceTest.Range(-1.0, t_width + 1.0, uni_step)
     z_range = PerformanceTest.Range(-0.02, 0.65, 0.65)
 
-    p_square = np.array([[0.0, 0.0, 0.72],
+    p_square = np.array([[0.0, 0.0, 0.0],
                          [0.0, t_width, 1.0],
-                         [t_length, t_width, 0.72],
-                         [t_length, 0.0, 0.72]], np.float64)
+                         [t_length, t_width, 0.0],
+                         [t_length, 0.0, 0.0]], np.float64)
 
     p_piramid2 = np.array([[0.0, 0.0, 0.0],
                           [0.0,        t_width,     0.0],
                           [t_length,   t_width / 2, 0.0],
                           [t_length/2, t_width,     1.0]], np.float64)
 
-    p_trapez = np.array( [[0.0,        0.0,       0.72],
-                          [0.0,        t_width,   0.72],
-                          [t_length/2,   t_width, 0.72],
+    p_trapez = np.array( [[0.0,        0.0,       0.0],
+                          [0.0,        t_width,   0.0],
+                          [t_length/2,   t_width, 0.0],
                           [t_length, 0.0,         1.0]], np.float64)
 
-    p = PerformanceTest(p_piramid2,
+    p = PerformanceTest(p_square,
                         x_range, y_range, z_range,
                         spacing_precision=-1,
                         all_roots=False,
