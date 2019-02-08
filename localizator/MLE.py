@@ -118,8 +118,8 @@ class MLE(object):
         self._chosenRootIdx = np.argmin(of_solutions)
 
         if self.condition_fun is not None:
-            user_cond_met = [self.condition_fun(res.flatten()) for res in self._estimatedPositions]
-            if user_cond_met[0] and not user_cond_met[1]:
+            user_cond_met = [self.condition_fun(np.array(res[0]).flatten()) for res in self._estimatedPositions]
+            if user_cond_met[0] != user_cond_met[1]:
                 self._chosenRootIdx = np.argwhere(user_cond_met)
 
         return src_positions[int(self._chosenRootIdx)]
@@ -384,4 +384,4 @@ def __full_performance_test():
     p.execute()
     p.plot(mark_receivers=True)
 
-__full_performance_test()
+#__full_performance_test()

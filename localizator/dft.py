@@ -15,7 +15,7 @@ class DFT:
 
     def transform(self, signal: np.ndarray) -> np.ndarray:
         if len(signal) < self._size:
-            raise self.InvalidSignalLength("Length:{} smaller than saved dft size:{}".format(len(signal), self._size))
+            signal = np.pad(signal, mode="constant", pad_width=(self._size - len(signal), 0))
 
         return np.fft.rfft(signal * self._window)
 

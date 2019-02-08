@@ -223,6 +223,12 @@ class SensorMatrix(object):
         l_bound = s_idx - self._dft.dft_size + 1
         u_bound = s_idx + self._dft.dft_size - 1
 
+        if l_bound < 0:
+            l_bound = 0
+
+        if u_bound >= len(self._mle_calc.receivers[0].data_buffer):
+            u_bound = len(self._mle_calc.receivers[0].data_buffer)
+
         bounce_data = [rec.data_buffer[l_bound: u_bound] for rec in self._mle_calc.receivers]
 
         for rec_idx in range(1, self._serial_settings["channelNr"]):
@@ -230,7 +236,7 @@ class SensorMatrix(object):
             delay, hist = gcc_phat(bounce_data[rec_idx], bounce_data[0], self._dft, phat=True,
                                    delay_in_seconds=True, buffered_dft=False)
             self._mle_calc.receivers[rec_idx].tDoA = delay
-        if not self.debug:
+        if self.debug:
             print(delay)
             plt.figure(figsize=(18, 10))
             plt.subplot(311)
