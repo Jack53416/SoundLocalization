@@ -12,5 +12,6 @@ dist/public/*
 
 .tscache/
 *.js
+!Gruntfile.js
 *.js.map
 package-lock.json
